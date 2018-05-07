@@ -2,6 +2,7 @@ package com.example.user.bakingapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ListView;
 
 import com.example.user.bakingapp.model.Recipe;
 import com.google.gson.Gson;
@@ -13,6 +14,12 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class MainActivity extends AppCompatActivity {
 
     String json;
@@ -22,27 +29,28 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loadJSONFromAsset();
+        final ListView listview = findViewById(R.id.recipe_list);
 
-        Type recipeListType = new TypeToken<ArrayList<Recipe>>(){}.getType();
-        List<Recipe> recipes = new Gson().fromJson(json, recipeListType);
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(RecipeClient.RECIPE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-    }
+        RecipeClient client = retrofit.create(RecipeClient.class);
+        Call<List<Recipe>> call = client.getRecipes();
 
-    /**
-     * method taken from https://stackoverflow.com/a/19945484
-     */
-    public void loadJSONFromAsset() {
-        try {
-            InputStream is = this.getAssets().open("recipe.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return;
-        }
+        call.enqueue(new Callback<List<Recipe>>() {
+            @Override
+            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+                List<Recipe> recipes = response.body();
+
+                listview.setAdapter(new RecipeAdapter(MainActivity.this, recipes));
+            }
+
+            @Override
+            public void onFailure(Call<List<Recipe>> call, Throwable t) {
+
+            }
+        });
     }
 }

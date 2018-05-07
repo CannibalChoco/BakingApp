@@ -11,4 +11,27 @@ public class Recipe {
     private int servings;
     private String image;
 
+    public long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public List<Step> getSteps() {
+        return steps;
+    }
+
+    public int getServings() {
+        return servings;
+    }
+
+    public String getImage() {
+        return image;
+    }
 }
