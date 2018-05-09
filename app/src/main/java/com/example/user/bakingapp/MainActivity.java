@@ -2,6 +2,7 @@ package com.example.user.bakingapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.widget.ListView;
 
 import com.example.user.bakingapp.model.Recipe;
@@ -14,6 +15,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -22,14 +24,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    String json;
+    @BindView(R.id.recipe_list)
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        final ListView listview = findViewById(R.id.recipe_list);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(RecipeClient.RECIPE_URL)
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         RecipeClient client = retrofit.create(RecipeClient.class);
+
         Call<List<Recipe>> call = client.getRecipes();
 
         call.enqueue(new Callback<List<Recipe>>() {
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
                 List<Recipe> recipes = response.body();
 
-                listview.setAdapter(new RecipeAdapter(MainActivity.this, recipes));
+                recyclerView.setAdapter(new RecipeAdapter(MainActivity.this, recipes));
             }
 
             @Override

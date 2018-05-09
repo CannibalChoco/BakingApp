@@ -1,5 +1,6 @@
 package com.example.user.bakingapp.model;
 
+
 public class Ingredient {
 
     private float quantity;
