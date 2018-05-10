@@ -2,20 +2,16 @@ package com.example.user.bakingapp;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.ListView;
 
+import com.example.user.bakingapp.data.database.AppDatabase;
 import com.example.user.bakingapp.model.Recipe;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -24,14 +20,36 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    @BindView(R.id.recipe_list)
+    @BindView(R.id.recipe_recycler_view)
     RecyclerView recyclerView;
+    RecipeAdapter recipeAdapter;
+
+    private AppDatabase appDb;
+    List<Recipe> recipeList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
+        appDb = AppDatabase.getInstance(this);
+        recipeList = appDb.recipeDao().loadAllRecipes();
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recipeAdapter = new RecipeAdapter(MainActivity.this, recipeList);
+        recyclerView.setAdapter(recipeAdapter);
+
+        if (recipeList == null || recipeList.isEmpty()){
+            getRecipesFromServer();
+        }
+    }
+
+    /**
+     * gets recipe list from server, adds them to database and adapter
+     */
+    private void getRecipesFromServer(){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(RecipeClient.RECIPE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -44,9 +62,10 @@ public class MainActivity extends AppCompatActivity {
         call.enqueue(new Callback<List<Recipe>>() {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                List<Recipe> recipes = response.body();
+                recipeList = response.body();
+                appDb.recipeDao().insertAllRecipes(recipeList);
 
-                recyclerView.setAdapter(new RecipeAdapter(MainActivity.this, recipes));
+                recipeAdapter.addAll(recipeList);
             }
 
             @Override
