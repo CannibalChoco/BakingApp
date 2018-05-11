@@ -1,45 +1,17 @@
 package com.example.user.bakingapp.model;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
-
 import java.util.List;
 
-/**
- * Storing nested objects https://stackoverflow.com/a/44889919
- */
-@Entity(tableName = "recipe")
 public class Recipe {
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    private long id;
     private String name;
+    private List<Ingredient> ingredients;
+    private List<Step> steps;
     private int servings;
     private String image;
-    @Ignore
-    private List<Ingredient> ingredients;
-    @Ignore
-    private List<Step> steps;
 
-    public Recipe (int id, String name, int servings, String image){
-        this.id = id;
-        this.name = name;
-        this.servings = servings;
-        this.image = image;
-    }
-
-    @Ignore
-    public Recipe (String name, int servings, String image, List<Ingredient> ingredients,
-                List<Step> steps){
-        this.name = name;
-        this.servings = servings;
-        this.image = image;
-        this.ingredients = ingredients;
-        this.steps = steps;
-    }
-
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -61,15 +33,5 @@ public class Recipe {
 
     public String getImage() {
         return image;
-    }
-
-    @Override
-    public String toString() {
-        return "Recipe{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", servings=" + servings +
-                ", image='" + image + '\'' +
-                '}';
     }
 }
