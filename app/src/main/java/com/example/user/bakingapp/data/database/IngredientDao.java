@@ -14,8 +14,11 @@ import java.util.List;
 @Dao
 public interface IngredientDao {
 
-//    @Query("SELECT * FROM ingredient WHERE recipeId LIKE :recipeId ORDER BY id ASC")
-//    List<Ingredient> loadAllIngredients(long recipeId);
+    @Query("SELECT * FROM ingredient")
+    List<Ingredient> loadAllIngredients();
+
+    @Query("SELECT * FROM ingredient WHERE parent_id LIKE :parentId ORDER BY id ASC")
+    List<Ingredient> loadIngredientsByParentId (long parentId);
 
     @Insert
     void insertRecipe(Ingredient ingredient);

@@ -14,8 +14,11 @@ import java.util.List;
 @Dao
 public interface StepDao {
 
-//    @Query("SELECT * FROM step WHERE recipeId LIKE :recipeId ORDER BY id ASC")
-//    List<Step> loadAllRecipeSteps(long recipeId);
+    @Query("SELECT * FROM step")
+    List<Step> loadAllSteps();
+
+    @Query("SELECT * FROM step WHERE parent_id LIKE :parentId ORDER BY id ASC")
+    List<Step> loadAllStepsByParentId(long parentId);
 
     @Insert
     void insertTask(Step step);

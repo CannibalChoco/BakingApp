@@ -6,6 +6,9 @@ import android.arch.persistence.room.PrimaryKey;
 
 import java.util.List;
 
+/**
+ * Storing nested objects https://stackoverflow.com/a/44889919
+ */
 @Entity(tableName = "recipe")
 public class Recipe {
 
@@ -14,10 +17,10 @@ public class Recipe {
     private String name;
     private int servings;
     private String image;
-//    @Ignore
-//    private List<Ingredient> ingredients;
-//    @Ignore
-//    private List<Step> steps;
+    @Ignore
+    private List<Ingredient> ingredients;
+    @Ignore
+    private List<Step> steps;
 
     public Recipe (int id, String name, int servings, String image){
         this.id = id;
@@ -26,15 +29,15 @@ public class Recipe {
         this.image = image;
     }
 
-//    @Ignore
-//    public Recipe (String name, int servings, String image, List<Ingredient> ingredients,
-//                List<Step> steps){
-//        this.name = name;
-//        this.servings = servings;
-//        this.image = image;
-//        this.ingredients = ingredients;
-//        this.steps = steps;
-//    }
+    @Ignore
+    public Recipe (String name, int servings, String image, List<Ingredient> ingredients,
+                List<Step> steps){
+        this.name = name;
+        this.servings = servings;
+        this.image = image;
+        this.ingredients = ingredients;
+        this.steps = steps;
+    }
 
     public int getId() {
         return id;
@@ -44,13 +47,13 @@ public class Recipe {
         return name;
     }
 
-//    public List<Ingredient> getIngredients() {
-//        return ingredients;
-//    }
-//
-//    public List<Step> getSteps() {
-//        return steps;
-//    }
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public List<Step> getSteps() {
+        return steps;
+    }
 
     public int getServings() {
         return servings;
@@ -58,5 +61,15 @@ public class Recipe {
 
     public String getImage() {
         return image;
+    }
+
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", servings=" + servings +
+                ", image='" + image + '\'' +
+                '}';
     }
 }

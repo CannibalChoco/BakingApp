@@ -1,24 +1,31 @@
 package com.example.user.bakingapp.model;
 
+import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
-@Entity(tableName = "step")
+@Entity(tableName = "step",
+        foreignKeys = {@ForeignKey(
+                entity = Recipe.class,
+                parentColumns = "id",
+                childColumns = "parent_id")})
 public class Step {
 
     @PrimaryKey(autoGenerate = true)
     private long id;
-    //long recipeId;
+    @ColumnInfo(name = "parent_id")
+    long parentId;
     private String shortDescription;
     private String description;
     private String videoURL;
     private String thumbnailURL;
 
-    public Step(long id, /*long recipeId,*/ String shortDescription, String description,
+    public Step(long id, long parentId, String shortDescription, String description,
                 String videoURL, String thumbnailURL) {
         this.id = id;
-        //this.recipeId = recipeId;
+        this.parentId = parentId;
         this.shortDescription = shortDescription;
         this.description = description;
         this.videoURL = videoURL;
@@ -26,9 +33,9 @@ public class Step {
     }
 
     @Ignore
-    public Step(/*long recipeId,*/ String shortDescription, String description, String videoURL,
+    public Step(long parentId, String shortDescription, String description, String videoURL,
                 String thumbnailURL) {
-        //this.recipeId = recipeId;
+        this.parentId = parentId;
         this.shortDescription = shortDescription;
         this.description = description;
         this.videoURL = videoURL;
@@ -39,9 +46,9 @@ public class Step {
         return id;
     }
 
-//    public long getRecipeId() {
-//        return recipeId;
-//    }
+    public long getParentId() {
+        return parentId;
+    }
 
     public String getShortDescription() {
         return shortDescription;
@@ -57,5 +64,17 @@ public class Step {
 
     public String getThumbnailURL() {
         return thumbnailURL;
+    }
+
+    @Override
+    public String toString() {
+        return "Step{" +
+                "id=" + id +
+                ", parentId=" + parentId +
+                ", shortDescription='" + shortDescription + '\'' +
+                ", description='" + description + '\'' +
+                ", videoURL='" + videoURL + '\'' +
+                ", thumbnailURL='" + thumbnailURL + '\'' +
+                '}';
     }
 }
