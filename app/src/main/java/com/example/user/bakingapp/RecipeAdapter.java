@@ -3,6 +3,7 @@ package com.example.user.bakingapp;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +24,16 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     private Context context;
     private List<Recipe> recipeList;
 
-    public RecipeAdapter(Context context, List<Recipe> recipeList) {
+    public interface OnRecipeClickListener{
+        void onRecipeSelected(int position);
+    }
+
+    private static OnRecipeClickListener recipeClickListener;
+
+    public RecipeAdapter(Context context, List<Recipe> recipeList, OnRecipeClickListener listener) {
         this.context = context;
         this.recipeList = recipeList;
+        recipeClickListener = listener;
     }
 
     @NonNull
@@ -55,11 +63,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     }
 
     public void addAll(List<Recipe> recipeList){
+        this.recipeList.clear();
         this.recipeList.addAll(recipeList);
         notifyDataSetChanged();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements
+            View.OnClickListener{
 
         @BindView(R.id.list_item_name)
         TextView name;
@@ -69,6 +79,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
             ButterKnife.bind(this, itemView);
         }
-    }
 
+        @Override
+        public void onClick(View view) {
+            Log.d("RECIPE", "ViewHolder - recipe selected");
+            recipeClickListener.onRecipeSelected(getAdapterPosition());
+
+        }
+    }
 }
