@@ -3,7 +3,9 @@ package com.example.user.bakingapp.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Ingredient implements Parcelable{
+import java.util.Locale;
+
+public class Ingredient implements Parcelable {
 
     private float quantity;
     private String measure;
@@ -27,12 +29,12 @@ public class Ingredient implements Parcelable{
         }
     };
 
-    public float getQuantity() {
-        return quantity;
+    public String getQuantity() {
+        return String.format(Locale.getDefault(), "%.0f", quantity);
     }
 
     public String getMeasure() {
-        return measure;
+        return measure.toLowerCase();
     }
 
     public String getIngredient() {

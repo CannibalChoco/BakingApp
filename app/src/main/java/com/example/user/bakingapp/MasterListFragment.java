@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.user.bakingapp.adapter.RecipeAdapter;
 import com.example.user.bakingapp.model.Recipe;
 
 import java.util.List;
