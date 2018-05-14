@@ -29,8 +29,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static List<Recipe> recipeList;
 
-    private static FragmentTransaction fragmentTransaction;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList(KEY_RECIPE_LIST, (ArrayList<Recipe>) recipeList);
 
-                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 MasterListFragment masterListFragment = new MasterListFragment();
                 masterListFragment.setArguments(bundle);
                 fragmentTransaction.add(R.id.fragment_container, masterListFragment).commit();
@@ -74,15 +72,5 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<List<Recipe>> call, Throwable t) {
             }
         });
-    }
-
-    public static void startFragmentTransaction(int position){
-        Log.d("RECIPE", "activity - recipe selected");
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(KEY_RECIPE, recipeList.get(position));
-
-        DetailFragment detailFragment = new DetailFragment();
-        detailFragment.setArguments(bundle);
-        fragmentTransaction.replace(R.id.fragment_container, detailFragment).commit();
     }
 }

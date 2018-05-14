@@ -21,19 +21,16 @@ import butterknife.ButterKnife;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder>{
 
-    private Context context;
     private List<Recipe> recipeList;
+    private OnRecipeClickListener listener;
 
     public interface OnRecipeClickListener{
         void onRecipeSelected(int position);
     }
 
-    private static OnRecipeClickListener recipeClickListener;
-
-    public RecipeAdapter(Context context, List<Recipe> recipeList, OnRecipeClickListener listener) {
-        this.context = context;
+    public RecipeAdapter(List<Recipe> recipeList, OnRecipeClickListener listener) {
         this.recipeList = recipeList;
-        recipeClickListener = listener;
+        this.listener = listener;
     }
 
     @NonNull
@@ -42,7 +39,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_item, parent, false);
 
-        return new ViewHolder(view);
+        return new ViewHolder(view, listener);
     }
 
     @Override
@@ -71,20 +68,24 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder implements
             View.OnClickListener{
 
+        private OnRecipeClickListener listener;
+
         @BindView(R.id.list_item_name)
         TextView name;
 
-        ViewHolder(View itemView){
+        ViewHolder(View itemView, OnRecipeClickListener listener){
             super(itemView);
 
+            this.listener = listener;
+
             ButterKnife.bind(this, itemView);
+
+            itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            Log.d("RECIPE", "ViewHolder - recipe selected");
-            recipeClickListener.onRecipeSelected(getAdapterPosition());
-
+            listener.onRecipeSelected(getAdapterPosition());
         }
     }
 }

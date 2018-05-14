@@ -1,9 +1,9 @@
 package com.example.user.bakingapp;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -32,8 +32,9 @@ public class MasterListFragment extends Fragment implements RecipeAdapter.OnReci
             recipes = getArguments().getParcelableArrayList(MainActivity.KEY_RECIPE_LIST);
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-            RecipeAdapter adapter = new RecipeAdapter(getActivity(), recipes, this);
-            final RecyclerView recyclerView = rootView.findViewById(R.id.master_list_recycler_view);
+            RecipeAdapter adapter = new RecipeAdapter(recipes, this);
+            RecyclerView recyclerView = rootView.findViewById(R.id.master_list_recycler_view);
+            recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(adapter);
         }
@@ -43,7 +44,11 @@ public class MasterListFragment extends Fragment implements RecipeAdapter.OnReci
 
     @Override
     public void onRecipeSelected(int position) {
-        Log.d("RECIPE", "fragment - recipe selected");
-        MainActivity.startFragmentTransaction(position);
+
+        DetailFragment detailFragment = new DetailFragment();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, detailFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }
