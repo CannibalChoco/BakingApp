@@ -32,6 +32,8 @@ public class MasterListFragment extends Fragment implements RecipeAdapter.OnReci
         View rootView = inflater.inflate(R.layout.fragment_master_list, container, false);
         ButterKnife.bind(this, rootView);
 
+        getActivity().setTitle(R.string.app_name);
+
         Bundle args = getArguments();
         if (args != null) {
             recipes = getArguments().getParcelableArrayList(MainActivity.KEY_RECIPE_LIST);

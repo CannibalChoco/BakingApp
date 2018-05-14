@@ -35,6 +35,8 @@ public class DetailFragment extends Fragment {
             recipe = getArguments().getParcelable(MainActivity.KEY_RECIPE);
 
             Log.d("RECIPE", recipe.toString());
+
+            getActivity().setTitle(recipe.getName());
         }
 
         return rootView;
