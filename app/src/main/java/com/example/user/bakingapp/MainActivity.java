@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.example.user.bakingapp.model.Recipe;
 
@@ -59,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
                 recipeList = response.body();
 
-                startMasterListFragment();
+                startRecipeListFragment();
             }
 
             @Override
@@ -68,14 +67,14 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         });
     }
 
-    private void startMasterListFragment() {
+    private void startRecipeListFragment() {
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(KEY_RECIPE_LIST, (ArrayList<Recipe>) recipeList);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        MasterListFragment masterListFragment = new MasterListFragment();
-        masterListFragment.setArguments(bundle);
-        fragmentTransaction.add(R.id.fragment_container, masterListFragment).commit();
+        RecipeListFragment recipeListFragment = new RecipeListFragment();
+        recipeListFragment.setArguments(bundle);
+        fragmentTransaction.add(R.id.fragment_container, recipeListFragment).commit();
 
         //Listen for changes in the back stack
         getSupportFragmentManager().addOnBackStackChangedListener(this);
