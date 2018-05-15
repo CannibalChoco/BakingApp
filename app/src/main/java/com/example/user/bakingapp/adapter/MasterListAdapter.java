@@ -11,6 +11,7 @@ import com.example.user.bakingapp.R;
 import com.example.user.bakingapp.model.Step;
 
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,8 +42,15 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull MasterListAdapter.ViewHolder holder, int position) {
-        holder.itemNr.setText(String.valueOf(position + 1) + ".");
-        holder.shortDescription.setText(steps.get(position).getShortDescription());
+
+        if (position == 0){
+            holder.ingredients.setText(R.string.label_ingredients);
+        } else {
+            holder.itemNr.setText(String.valueOf(position) + ".");
+            holder.shortDescription.setText(steps.get(position).getShortDescription());
+        }
+
+
     }
 
     @Override
@@ -59,6 +67,8 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Vi
         TextView shortDescription;
         @BindView(R.id.item_nr)
         TextView itemNr;
+        @BindView(R.id.ingredients)
+        TextView ingredients;
 
         public ViewHolder(View itemView, OnStepClickListener listener) {
             super(itemView);

@@ -7,4 +7,7 @@
     <!-- Label for Servings -->
     <string name="label_servings">Servings</string>
 
+    <string name="label_prev">Previous</string>
+    <string name="label_next">Next</string>
+
 </resources>

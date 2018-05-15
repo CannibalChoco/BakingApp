@@ -12,19 +12,32 @@
         android:layout_marginBottom="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="1." />
 
     <TextView
-        android:id="@+id/short_description"
+    android:id="@+id/short_description"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:ellipsize="end"
+    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+    app:layout_constraintBaseline_toBaselineOf="@+id/item_nr"
+    app:layout_constraintStart_toEndOf="@+id/item_nr"
+    tools:text="This is a short description of a step" />
+
+    <TextView
+        android:id="@+id/ingredients"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:ellipsize="end"
-        app:layout_constraintBaseline_toBaselineOf="@+id/item_nr"
-        app:layout_constraintStart_toEndOf="@+id/item_nr"
-        tools:text="This is a short description of a step" />
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="8dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/label_ingredients" />
 
 </android.support.constraint.ConstraintLayout>
