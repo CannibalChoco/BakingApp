@@ -17,14 +17,10 @@ import android.widget.TextView;
 
 import com.example.user.bakingapp.adapter.IngredientAdapter;
 import com.example.user.bakingapp.model.Ingredient;
-import com.example.user.bakingapp.model.Recipe;
 import com.example.user.bakingapp.model.Step;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
-import butterknife.BindBitmap;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
