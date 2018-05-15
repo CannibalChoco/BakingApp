@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,7 @@ import butterknife.ButterKnife;
 
 public class RecipeListFragment extends Fragment implements RecipeAdapter.OnRecipeClickListener{
 
-    @BindView(R.id.master_list_recycler_view)
+    @BindView(R.id.recipe_list_recycler_view)
     RecyclerView recyclerView;
 
     private List<Recipe> recipes;
@@ -31,7 +32,7 @@ public class RecipeListFragment extends Fragment implements RecipeAdapter.OnReci
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        // DONE: use fragment_recipe_list
+        Log.d("RECIPE", "RecipeListFragment");
         View rootView = inflater.inflate(R.layout.fragment_recipe_list, container, false);
         ButterKnife.bind(this, rootView);
 
@@ -57,10 +58,10 @@ public class RecipeListFragment extends Fragment implements RecipeAdapter.OnReci
         Bundle bundle = new Bundle();
         bundle.putParcelable(MainActivity.KEY_RECIPE, recipes.get(position));
 
-        DetailFragment detailFragment = new DetailFragment();
-        detailFragment.setArguments(bundle);
+        MasterListFragment masterListFragment = new MasterListFragment();
+        masterListFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, detailFragment);
+        fragmentTransaction.replace(R.id.fragment_container, masterListFragment);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

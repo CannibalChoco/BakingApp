@@ -2,6 +2,6 @@
 <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/master_list_recycler_view">
+    android:id="@+id/recipe_list_recycler_view">
 
 </android.support.v7.widget.RecyclerView>
