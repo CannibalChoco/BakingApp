@@ -1,10 +1,12 @@
 package com.example.user.bakingapp;
 
 
+import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.user.bakingapp.model.Recipe;
 
@@ -22,7 +24,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 // TODO: refresh db once a day
 // TODO: if new recipes are found, notify user
 
-public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener {
+public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener,
+        DetailFragment.OnNextStepListener{
 
     public static final String KEY_RECIPE_LIST = "recipe_list";
     public static final String KEY_RECIPE = "recipe";
@@ -30,8 +33,11 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     public static final String KEY_INGREDIENT_LIST = "ingredient_list";
     public static final String KEY_RECIPE_NAME = "recipe_name";
     public static final String KEY_RECIPE_SERVINGS = "servings";
+    public static final String KEY_STEP_ID = "step_id";
 
     private static List<Recipe> recipeList;
+
+    private boolean isTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +45,21 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        if(findViewById(R.id.master_detail_linear_layout) != null){
+            isTwoPane = true;
+            // TODO: set up detail fragments views
+
+
+        }
+
         recipeList = new ArrayList<>();
 
         getRecipes();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     /**
@@ -106,5 +124,21 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         //This method is called when the up button is pressed. Just the pop back stack.
         getSupportFragmentManager().popBackStack();
         return true;
+    }
+
+    @Override
+    public void onNextStep(int position) {
+        Log.d("NEXT", "MainActivity- callback");
+        MasterListFragment masterListFragment = (MasterListFragment)
+                getSupportFragmentManager().findFragmentByTag(MasterListFragment.TAG);
+
+        if (masterListFragment != null){
+            Log.d("NEXT", "masterFragment not null");
+            masterListFragment.launchNextStep(position);
+        } else {
+            Log.d("NEXT", "masterFragment null");
+        }
+
+
     }
 }

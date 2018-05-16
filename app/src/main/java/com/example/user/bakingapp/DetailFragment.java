@@ -1,8 +1,8 @@
 package com.example.user.bakingapp;
 
 
+import android.content.Context;
 import android.os.Bundle;
-import android.os.TestLooperManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -23,6 +23,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 // TODO: 1. Get Step or Ingredient instead of Recipe; ???
 // TODO: 2. Switch between Ingredients and Steps details
@@ -31,10 +32,19 @@ import butterknife.ButterKnife;
 // TODO: 5. Set the title accordingly
 public class DetailFragment extends Fragment {
 
+    public static final String TAG = DetailFragment.class.getSimpleName();
+
     public DetailFragment(){}
+
+    public interface OnNextStepListener{
+        public void onNextStep(int position);
+    }
+
+    private OnNextStepListener nextStepListener;
 
     private List<Ingredient> ingredients;
     private Step step;
+    private int stepId;
 
     @BindView(R.id.ingredients_recycler_view)
     RecyclerView recyclerViewIngredients;
@@ -47,11 +57,21 @@ public class DetailFragment extends Fragment {
     @BindView(R.id.step_description)
     TextView stepDescription;
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try{
+            nextStepListener = (OnNextStepListener) context;
+        } catch (ClassCastException e){
+            throw new ClassCastException(context.toString() + " must implement OnNextStepListener");
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        Log.d("RECIPE", "DetailFragment");
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         ButterKnife.bind(this, rootView);
 
@@ -64,8 +84,6 @@ public class DetailFragment extends Fragment {
                 // get ingredients from args
                 ingredients = args.getParcelableArrayList(MainActivity.KEY_INGREDIENT_LIST);
                 stUpIngredientsView(args.getInt(MainActivity.KEY_RECIPE_SERVINGS));
-                // set title
-
 
                 // user selected step
             } else if (args.containsKey(MainActivity.KEY_STEP)){
@@ -73,15 +91,22 @@ public class DetailFragment extends Fragment {
 
                 step = args.getParcelable(MainActivity.KEY_STEP);
                 stepDescription.setText(step.getDescription());
-
-                // set title
-                //getActivity().setTitle(step.getShortDescription());
             }
 
+            stepId = args.getInt(MainActivity.KEY_STEP_ID);
         }
 
         return rootView;
     }
+
+    @OnClick(R.id.button_next)
+    public void onNextStepClicked(){
+        Log.d("NEXT", "next step clicked");
+        Log.d("NEXT", String.valueOf(stepId++));
+        nextStepListener.onNextStep(stepId ++);
+    }
+
+
 
     /**
      * Set up everything needed for the Ingredient view

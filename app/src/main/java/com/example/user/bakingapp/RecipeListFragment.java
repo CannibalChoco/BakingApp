@@ -21,6 +21,8 @@ import butterknife.ButterKnife;
 
 public class RecipeListFragment extends Fragment implements RecipeAdapter.OnRecipeClickListener{
 
+    public static final String TAG = RecipeListFragment.class.getSimpleName();
+
     @BindView(R.id.recipe_list_recycler_view)
     RecyclerView recyclerView;
 
@@ -61,8 +63,9 @@ public class RecipeListFragment extends Fragment implements RecipeAdapter.OnReci
         MasterListFragment masterListFragment = new MasterListFragment();
         masterListFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, masterListFragment);
-        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.replace(R.id.fragment_container, masterListFragment, MasterListFragment.TAG);
+        fragmentTransaction.addToBackStack(MasterListFragment.TAG);
+        Log.d("NEXT", "onRecipeSelected - add to back stack");
         fragmentTransaction.commit();
     }
 }
