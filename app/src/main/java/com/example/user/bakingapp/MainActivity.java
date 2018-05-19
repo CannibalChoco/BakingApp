@@ -24,6 +24,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 // TODO: refresh db once a day
 // TODO: if new recipes are found, notify user
 
+// TODO: Style- single method for prev/next buttons
+
 public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener,
         DetailFragment.OnNextStepListener{
 

@@ -53,9 +53,6 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.On
 
     @Override
     public void onStepSelected(int position) {
-
-        Log.d("MASTER", "masterListFragment onStepSelected");
-
         launchDetailFragment(getArgsForDetailFragment(position));
     }
 
@@ -109,6 +106,7 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.On
     }
 
     public void launchNextStep(int nextStep){
+        getFragmentManager().popBackStack();
         if (nextStep < adapter.getItemCount()){
             launchDetailFragment(getArgsForDetailFragment(nextStep));
         }

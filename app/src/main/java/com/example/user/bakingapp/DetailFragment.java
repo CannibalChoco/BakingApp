@@ -101,6 +101,13 @@ public class DetailFragment extends Fragment {
             }
 
             stepId = args.getInt(MainActivity.KEY_STEP_ID);
+            int adapterSize = args.getInt(MainActivity.KEY_ADAPTER_SIZE);
+
+            if (stepId == 0){
+                buttonPrev.setVisibility(View.GONE);
+            } else if (stepId > 0 && stepId + 1 == adapterSize){
+                buttonNext.setVisibility(View.GONE);
+            }
         }
 
         return rootView;
