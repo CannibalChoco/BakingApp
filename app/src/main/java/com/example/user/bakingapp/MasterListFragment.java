@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -54,7 +53,10 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.On
 
     @Override
     public void onStepSelected(int position) {
-        launchDetailFragment(getArgsForDetailFragment(position), true);
+
+        Log.d("MASTER", "masterListFragment onStepSelected");
+
+        launchDetailFragment(getArgsForDetailFragment(position));
     }
 
     /**
@@ -72,20 +74,12 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.On
      * Create new DetailFragment, add bundle of arguments, start fragment transaction
      * @param bundle arguments to be sent to the fragment
      */
-    private void launchDetailFragment(Bundle bundle, boolean addToBackStack) {
-        Log.d("NEXT", "MasterListFragment - launch detailfragment");
-
+    private void launchDetailFragment(Bundle bundle) {
         DetailFragment detailFragment = new DetailFragment();
         detailFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, detailFragment, DetailFragment.TAG);
-        if(addToBackStack){
-            fragmentTransaction.addToBackStack(DetailFragment.TAG);
-            Log.d("NEXT", "launchDetailFragment - add to back stack");
-        } else {
-            Log.d("NEXT", "launchDetailFragment - DO NOT add to back stack");
-        }
-
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
@@ -99,7 +93,8 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.On
         Bundle bundle = new Bundle();
         if (position == 0){
             // ingredients clicked- send ingredients
-            bundle.putParcelableArrayList(MainActivity.KEY_INGREDIENT_LIST, (ArrayList) recipe.getIngredients());
+            bundle.putParcelableArrayList(MainActivity.KEY_INGREDIENT_LIST,
+                    (ArrayList) recipe.getIngredients());
         } else {
             // step clicked - send step
             bundle.putParcelable(MainActivity.KEY_STEP, recipe.getSteps().get(position));
@@ -108,14 +103,14 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.On
         bundle.putString(MainActivity.KEY_RECIPE_NAME, recipe.getName());
         bundle.putInt(MainActivity.KEY_RECIPE_SERVINGS, recipe.getServings());
         bundle.putInt(MainActivity.KEY_STEP_ID, position);
+        bundle.putInt(MainActivity.KEY_ADAPTER_SIZE, adapter.getItemCount());
+
         return bundle;
     }
 
     public void launchNextStep(int nextStep){
-        Log.d("NEXT", "MasterListFragment - launch next");
-        Log.d("NEXT", "MasterListFragment - adapter size" + adapter.getItemCount());
         if (nextStep < adapter.getItemCount()){
-            launchDetailFragment(getArgsForDetailFragment(nextStep), false);
+            launchDetailFragment(getArgsForDetailFragment(nextStep));
         }
     }
 }

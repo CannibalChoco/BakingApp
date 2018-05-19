@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.user.bakingapp.adapter.IngredientAdapter;
@@ -39,6 +40,7 @@ public class DetailFragment extends Fragment {
     public interface OnNextStepListener{
         void onNextStep(int position);
         void onPrevStep(int position);
+//        void onStepSelected(int position);
     }
 
     private OnNextStepListener nextStepListener;
@@ -57,6 +59,10 @@ public class DetailFragment extends Fragment {
     ConstraintLayout stepsView;
     @BindView(R.id.step_description)
     TextView stepDescription;
+    @BindView(R.id.button_prev)
+    Button buttonPrev;
+    @BindView(R.id.button_next)
+    Button buttonNext;
 
     @Override
     public void onAttach(Context context) {
@@ -100,6 +106,17 @@ public class DetailFragment extends Fragment {
         return rootView;
     }
 
+//    @OnClick(R.id.button_next)
+//    public void nextClicked(){
+//        nextStepListener.onStepSelected(stepId++);
+//    }
+//
+//    @OnClick(R.id.button_prev)
+//    public void prevClicked(){
+//        nextStepListener.onStepSelected(stepId--);
+//    }
+
+
     @OnClick(R.id.button_next)
     public void onNextStepClicked(){
         Log.d("NEXT", "next step clicked");
@@ -109,6 +126,8 @@ public class DetailFragment extends Fragment {
 
     @OnClick(R.id.button_prev)
     public void onPrevStepClicked(){
+        Log.d("NEXT", "next step clicked");
+        Log.d("NEXT", String.valueOf(stepId--));
         nextStepListener.onPrevStep(stepId--);
     }
 

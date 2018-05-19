@@ -63,7 +63,7 @@ public class RecipeListFragment extends Fragment implements RecipeAdapter.OnReci
         masterListFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, masterListFragment, MasterListFragment.TAG);
-        fragmentTransaction.addToBackStack(MasterListFragment.TAG);
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 }
