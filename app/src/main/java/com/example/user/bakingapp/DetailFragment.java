@@ -117,6 +117,10 @@ public class DetailFragment extends Fragment {
                 stepDescription.setText(step.getDescription());
 
                 videoUrl = step.getVideoURL();
+
+                if (videoUrl == null || videoUrl.isEmpty()){
+                    playerView.setVisibility(View.GONE);
+                }
             }
 
             stepId = args.getInt(MainActivity.KEY_STEP_ID);
@@ -138,10 +142,7 @@ public class DetailFragment extends Fragment {
 
         if (videoUrl != null){
             initPlayer();
-        } else {
-            playerView.setVisibility(View.GONE);
         }
-
     }
 
     @Override
