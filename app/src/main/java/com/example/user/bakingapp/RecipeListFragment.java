@@ -34,7 +34,6 @@ public class RecipeListFragment extends Fragment implements RecipeAdapter.OnReci
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        Log.d("RECIPE", "RecipeListFragment");
         View rootView = inflater.inflate(R.layout.fragment_recipe_list, container, false);
         ButterKnife.bind(this, rootView);
 
@@ -65,7 +64,6 @@ public class RecipeListFragment extends Fragment implements RecipeAdapter.OnReci
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, masterListFragment, MasterListFragment.TAG);
         fragmentTransaction.addToBackStack(MasterListFragment.TAG);
-        Log.d("NEXT", "onRecipeSelected - add to back stack");
         fragmentTransaction.commit();
     }
 }

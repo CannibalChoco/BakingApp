@@ -37,7 +37,8 @@ public class DetailFragment extends Fragment {
     public DetailFragment(){}
 
     public interface OnNextStepListener{
-        public void onNextStep(int position);
+        void onNextStep(int position);
+        void onPrevStep(int position);
     }
 
     private OnNextStepListener nextStepListener;
@@ -106,7 +107,10 @@ public class DetailFragment extends Fragment {
         nextStepListener.onNextStep(stepId ++);
     }
 
-
+    @OnClick(R.id.button_prev)
+    public void onPrevStepClicked(){
+        nextStepListener.onPrevStep(stepId--);
+    }
 
     /**
      * Set up everything needed for the Ingredient view

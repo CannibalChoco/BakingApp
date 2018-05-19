@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,8 +21,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MasterListFragment extends Fragment implements MasterListAdapter.OnStepClickListener,
-        DetailFragment.OnNextStepListener{
+public class MasterListFragment extends Fragment implements MasterListAdapter.OnStepClickListener{
 
     public static final String TAG = MasterListFragment.class.getSimpleName();
 
@@ -74,6 +74,7 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.On
      */
     private void launchDetailFragment(Bundle bundle, boolean addToBackStack) {
         Log.d("NEXT", "MasterListFragment - launch detailfragment");
+
         DetailFragment detailFragment = new DetailFragment();
         detailFragment.setArguments(bundle);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -116,10 +117,5 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.On
         if (nextStep < adapter.getItemCount()){
             launchDetailFragment(getArgsForDetailFragment(nextStep), false);
         }
-    }
-
-    @Override
-    public void onNextStep(int position) {
-        launchNextStep(position);
     }
 }

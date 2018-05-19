@@ -141,4 +141,19 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
 
 
     }
+
+    @Override
+    public void onPrevStep(int position) {
+        Log.d("NEXT", "MainActivity- callback");
+        MasterListFragment masterListFragment = (MasterListFragment)
+                getSupportFragmentManager().findFragmentByTag(MasterListFragment.TAG);
+
+        if (masterListFragment != null){
+            Log.d("NEXT", "masterFragment not null");
+            masterListFragment.launchNextStep(position);
+        } else {
+            Log.d("NEXT", "masterFragment null");
+        }
+    }
+
 }
