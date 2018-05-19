@@ -2,6 +2,7 @@ package com.example.user.bakingapp;
 
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +20,17 @@ import android.widget.TextView;
 import com.example.user.bakingapp.adapter.IngredientAdapter;
 import com.example.user.bakingapp.model.Ingredient;
 import com.example.user.bakingapp.model.Step;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.RenderersFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 
 import java.util.List;
 
@@ -48,6 +60,8 @@ public class DetailFragment extends Fragment {
     private List<Ingredient> ingredients;
     private Step step;
     private int stepId;
+    private String videoUrl;
+    private SimpleExoPlayer player;
 
     @BindView(R.id.ingredients_recycler_view)
     RecyclerView recyclerViewIngredients;
@@ -63,6 +77,9 @@ public class DetailFragment extends Fragment {
     Button buttonPrev;
     @BindView(R.id.button_next)
     Button buttonNext;
+    @BindView(R.id.player_view)
+    PlayerView playerView;
+
 
     @Override
     public void onAttach(Context context) {
@@ -98,6 +115,8 @@ public class DetailFragment extends Fragment {
 
                 step = args.getParcelable(MainActivity.KEY_STEP);
                 stepDescription.setText(step.getDescription());
+
+                videoUrl = step.getVideoURL();
             }
 
             stepId = args.getInt(MainActivity.KEY_STEP_ID);
@@ -113,7 +132,49 @@ public class DetailFragment extends Fragment {
         return rootView;
     }
 
-//    @OnClick(R.id.button_next)
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if (videoUrl != null){
+            initPlayer();
+        } else {
+            playerView.setVisibility(View.GONE);
+        }
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        if (player != null){
+            playerView.setPlayer(null);
+            player.release();
+            player = null;
+        }
+    }
+
+    private void initPlayer() {
+        player = ExoPlayerFactory.newSimpleInstance(getContext(), new DefaultTrackSelector());
+        playerView.setPlayer(player);
+
+        DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+
+        // tell the exoplayer what to play
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(
+                getContext(),
+                Util.getUserAgent(getContext(), "bakingapp"),
+                bandwidthMeter);
+
+        MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
+                .createMediaSource(Uri.parse(step.getVideoURL()));
+
+        player.prepare(videoSource);
+        player.setPlayWhenReady(true);
+    }
+
+    //    @OnClick(R.id.button_next)
 //    public void nextClicked(){
 //        nextStepListener.onStepSelected(stepId++);
 //    }
@@ -122,7 +183,6 @@ public class DetailFragment extends Fragment {
 //    public void prevClicked(){
 //        nextStepListener.onStepSelected(stepId--);
 //    }
-
 
     @OnClick(R.id.button_next)
     public void onNextStepClicked(){
