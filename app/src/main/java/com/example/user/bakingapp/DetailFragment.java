@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.user.bakingapp.adapter.IngredientAdapter;
@@ -31,6 +32,7 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -74,6 +76,8 @@ public class DetailFragment extends Fragment {
     Button buttonNext;
     @BindView(R.id.player_view)
     PlayerView playerView;
+    @BindView(R.id.thumbnail_view)
+    ImageView thumbnailView;
 
 
     @Override
@@ -112,9 +116,17 @@ public class DetailFragment extends Fragment {
                 stepDescription.setText(step.getDescription());
 
                 videoUrl = step.getVideoURL();
+                boolean hasVideo = false;
 
                 if (videoUrl == null || videoUrl.isEmpty()){
                     playerView.setVisibility(View.GONE);
+
+                    String thumbnailUrl = step.getThumbnailURL();
+                    if (thumbnailUrl != null && !thumbnailUrl.isEmpty()){
+                        Picasso.with(getContext()).load(thumbnailUrl).into(thumbnailView);
+                    }
+                } else {
+                    thumbnailView.setVisibility(View.GONE);
                 }
             }
 

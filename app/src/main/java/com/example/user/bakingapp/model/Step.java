@@ -38,7 +38,9 @@ public class Step implements Parcelable{
     }
 
     public String getVideoURL() {
-        return videoURL;
+        if (videoURL != null && !videoURL.isEmpty()) return videoURL;
+
+        return getThumbnailVideo();
     }
 
     public String getThumbnailURL() {
@@ -70,5 +72,9 @@ public class Step implements Parcelable{
 
     private boolean thumbnailFormatValid(String thumbnailURL){
         return !thumbnailURL.endsWith(".mp4");
+    }
+
+    private String getThumbnailVideo(){
+        return !thumbnailFormatValid(thumbnailURL) ? thumbnailURL : null;
     }
 }

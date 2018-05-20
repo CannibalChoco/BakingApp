@@ -6,14 +6,32 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-        android:id="@+id/player_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:resize_mode="fixed_width"/>
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/media_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+            android:id="@+id/player_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:resize_mode="fixed_width"/>
+
+        <ImageView
+            android:id="@+id/thumbnail_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+    </android.support.constraint.ConstraintLayout>
 
     <TextView
         android:id="@+id/step_description"
@@ -23,7 +41,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/player_view"
+        app:layout_constraintTop_toBottomOf="@+id/media_container"
         tools:text="add all ingredients together, mix a lot. Sir mixalot. Then bake for some time." />
 
 </android.support.constraint.ConstraintLayout>
