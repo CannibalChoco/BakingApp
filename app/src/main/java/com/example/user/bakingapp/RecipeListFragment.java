@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.example.user.bakingapp.adapter.RecipeAdapter;
 import com.example.user.bakingapp.model.Recipe;
+import com.example.user.bakingapp.model.Step;
 
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class RecipeListFragment extends Fragment implements RecipeAdapter.OnReci
             recipes = getArguments().getParcelableArrayList(MainActivity.KEY_RECIPE_LIST);
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-            RecipeAdapter adapter = new RecipeAdapter(recipes, this);
+            RecipeAdapter adapter = new RecipeAdapter(getContext(), recipes, this);
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(adapter);
             recyclerView.setHasFixedSize(true);
@@ -66,4 +67,5 @@ public class RecipeListFragment extends Fragment implements RecipeAdapter.OnReci
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
 }

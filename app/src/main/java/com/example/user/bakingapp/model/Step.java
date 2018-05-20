@@ -42,7 +42,7 @@ public class Step implements Parcelable{
     }
 
     public String getThumbnailURL() {
-        return thumbnailURL;
+        return  (thumbnailFormatValid(thumbnailURL)) ? thumbnailURL : null;
     }
 
     @Override
@@ -66,5 +66,9 @@ public class Step implements Parcelable{
         parcel.writeString(description);
         parcel.writeString(videoURL);
         parcel.writeString(thumbnailURL);
+    }
+
+    private boolean thumbnailFormatValid(String thumbnailURL){
+        return !thumbnailURL.endsWith(".mp4");
     }
 }

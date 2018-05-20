@@ -38,11 +38,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-// TODO: 1. Get Step or Ingredient instead of Recipe; ???
-// TODO: 2. Switch between Ingredients and Steps details
-// TODO: 3. Create Step Detail layout
-// TODO: 4. display Step and Ingredient in separate layouts
-// TODO: 5. Set the title accordingly
 public class DetailFragment extends Fragment {
 
     public static final String TAG = DetailFragment.class.getSimpleName();
