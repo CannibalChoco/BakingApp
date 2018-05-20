@@ -1,4 +1,4 @@
-package com.example.user.bakingapp;
+package com.example.user.bakingapp.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -6,14 +6,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.user.bakingapp.R;
 import com.example.user.bakingapp.adapter.RecipeAdapter;
 import com.example.user.bakingapp.model.Recipe;
-import com.example.user.bakingapp.model.Step;
 
 import java.util.List;
 
@@ -42,7 +41,7 @@ public class RecipeListFragment extends Fragment implements RecipeAdapter.OnReci
 
         Bundle args = getArguments();
         if (args != null) {
-            recipes = getArguments().getParcelableArrayList(MainActivity.KEY_RECIPE_LIST);
+            recipes = getArguments().getParcelableArrayList(RecipeListActivity.KEY_RECIPE_LIST);
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             RecipeAdapter adapter = new RecipeAdapter(getContext(), recipes, this);
@@ -58,7 +57,7 @@ public class RecipeListFragment extends Fragment implements RecipeAdapter.OnReci
     public void onRecipeSelected(int position) {
 
         Bundle bundle = new Bundle();
-        bundle.putParcelable(MainActivity.KEY_RECIPE, recipes.get(position));
+        bundle.putParcelable(RecipeListActivity.KEY_RECIPE, recipes.get(position));
 
         MasterListFragment masterListFragment = new MasterListFragment();
         masterListFragment.setArguments(bundle);

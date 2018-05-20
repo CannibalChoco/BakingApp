@@ -1,4 +1,4 @@
-package com.example.user.bakingapp;
+package com.example.user.bakingapp.ui;
 
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -7,13 +7,14 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.user.bakingapp.R;
 import com.example.user.bakingapp.adapter.MasterListAdapter;
 import com.example.user.bakingapp.model.Recipe;
+import com.example.user.bakingapp.utils.BakingAppConstants;
 
 import java.util.ArrayList;
 
@@ -42,7 +43,7 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.On
 
         Bundle bundle = getArguments();
         if(bundle != null){
-            recipe = getArguments().getParcelable(MainActivity.KEY_RECIPE);
+            recipe = getArguments().getParcelable(BakingAppConstants.KEY_RECIPE);
             setUpMasterListView();
 
             getActivity().setTitle(recipe.getName());
@@ -90,17 +91,17 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.On
         Bundle bundle = new Bundle();
         if (position == 0){
             // ingredients clicked- send ingredients
-            bundle.putParcelableArrayList(MainActivity.KEY_INGREDIENT_LIST,
+            bundle.putParcelableArrayList(BakingAppConstants.KEY_INGREDIENT_LIST,
                     (ArrayList) recipe.getIngredients());
         } else {
             // step clicked - send step
-            bundle.putParcelable(MainActivity.KEY_STEP, recipe.getSteps().get(position));
+            bundle.putParcelable(BakingAppConstants.KEY_STEP, recipe.getSteps().get(position));
         }
 
-        bundle.putString(MainActivity.KEY_RECIPE_NAME, recipe.getName());
-        bundle.putInt(MainActivity.KEY_RECIPE_SERVINGS, recipe.getServings());
-        bundle.putInt(MainActivity.KEY_STEP_ID, position);
-        bundle.putInt(MainActivity.KEY_ADAPTER_SIZE, adapter.getItemCount());
+        bundle.putString(BakingAppConstants.KEY_RECIPE_NAME, recipe.getName());
+        bundle.putInt(BakingAppConstants.KEY_RECIPE_SERVINGS, recipe.getServings());
+        bundle.putInt(BakingAppConstants.KEY_STEP_ID, position);
+        bundle.putInt(BakingAppConstants.KEY_ADAPTER_SIZE, adapter.getItemCount());
 
         return bundle;
     }

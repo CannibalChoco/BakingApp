@@ -16,7 +16,7 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/button_prev"
         app:layout_constraintTop_toTopOf="parent"
-        tools:context=".DetailFragment">
+        tools:context=".ui.DetailFragment">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"

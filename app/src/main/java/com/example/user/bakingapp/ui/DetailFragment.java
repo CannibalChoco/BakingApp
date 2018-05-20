@@ -1,4 +1,4 @@
-package com.example.user.bakingapp;
+package com.example.user.bakingapp.ui;
 
 
 import android.content.Context;
@@ -18,11 +18,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.user.bakingapp.R;
 import com.example.user.bakingapp.adapter.IngredientAdapter;
 import com.example.user.bakingapp.model.Ingredient;
 import com.example.user.bakingapp.model.Step;
+import com.example.user.bakingapp.utils.BakingAppConstants;
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -100,19 +101,19 @@ public class DetailFragment extends Fragment {
 
         Bundle args = getArguments();
         if (args != null) {
-            getActivity().setTitle(args.getString(MainActivity.KEY_RECIPE_NAME));
+            getActivity().setTitle(args.getString(BakingAppConstants.KEY_RECIPE_NAME));
             // User selected ingredients
-            if(args.containsKey(MainActivity.KEY_INGREDIENT_LIST)){
+            if(args.containsKey(BakingAppConstants.KEY_INGREDIENT_LIST)){
                 stepsView.setVisibility(View.INVISIBLE);
                 // get ingredients from args
-                ingredients = args.getParcelableArrayList(MainActivity.KEY_INGREDIENT_LIST);
-                stUpIngredientsView(args.getInt(MainActivity.KEY_RECIPE_SERVINGS));
+                ingredients = args.getParcelableArrayList(BakingAppConstants.KEY_INGREDIENT_LIST);
+                stUpIngredientsView(args.getInt(BakingAppConstants.KEY_RECIPE_SERVINGS));
 
                 // user selected step
-            } else if (args.containsKey(MainActivity.KEY_STEP)){
+            } else if (args.containsKey(BakingAppConstants.KEY_STEP)){
                 ingredientsView.setVisibility(View.GONE);
 
-                step = args.getParcelable(MainActivity.KEY_STEP);
+                step = args.getParcelable(BakingAppConstants.KEY_STEP);
                 stepDescription.setText(step.getDescription());
 
                 videoUrl = step.getVideoURL();
@@ -130,8 +131,8 @@ public class DetailFragment extends Fragment {
                 }
             }
 
-            stepId = args.getInt(MainActivity.KEY_STEP_ID);
-            int adapterSize = args.getInt(MainActivity.KEY_ADAPTER_SIZE);
+            stepId = args.getInt(BakingAppConstants.KEY_STEP_ID);
+            int adapterSize = args.getInt(BakingAppConstants.KEY_ADAPTER_SIZE);
 
             if (stepId == 0){
                 buttonPrev.setVisibility(View.GONE);

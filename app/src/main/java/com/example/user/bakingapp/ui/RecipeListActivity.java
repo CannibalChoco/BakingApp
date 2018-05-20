@@ -1,14 +1,16 @@
-package com.example.user.bakingapp;
+package com.example.user.bakingapp.ui;
 
 
-import android.os.PersistableBundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.user.bakingapp.R;
+import com.example.user.bakingapp.RecipeClient;
 import com.example.user.bakingapp.model.Recipe;
+import com.example.user.bakingapp.utils.BakingAppConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,17 +28,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 // TODO: Style- single method for prev/next buttons
 
-public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener,
-        DetailFragment.OnNextStepListener{
+public class RecipeListActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener,
+        DetailFragment.OnNextStepListener {
 
-    public static final String KEY_RECIPE_LIST = "recipe_list";
-    public static final String KEY_RECIPE = "recipe";
-    public static final String KEY_STEP = "step";
-    public static final String KEY_INGREDIENT_LIST = "ingredient_list";
-    public static final String KEY_RECIPE_NAME = "recipe_name";
-    public static final String KEY_RECIPE_SERVINGS = "servings";
-    public static final String KEY_STEP_ID = "step_id";
-    public static final String KEY_ADAPTER_SIZE = "adapter_size";
+    // TODO: handle only RecipeListFragment
+
+
 
     private static List<Recipe> recipeList;
 
@@ -83,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
 
     private void startRecipeListFragment() {
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(KEY_RECIPE_LIST, (ArrayList<Recipe>) recipeList);
+        bundle.putParcelableArrayList(BakingAppConstants.KEY_RECIPE_LIST, (ArrayList<Recipe>) recipeList);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         RecipeListFragment recipeListFragment = new RecipeListFragment();
@@ -133,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
 
     @Override
     public void onNextStep(int position) {
-        Log.d("NEXT", "MainActivity- callback");
+        Log.d("NEXT", "RecipeListActivity- callback");
         MasterListFragment masterListFragment = (MasterListFragment)
                 getSupportFragmentManager().findFragmentByTag(MasterListFragment.TAG);
 
@@ -147,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
 
     @Override
     public void onPrevStep(int position) {
-        Log.d("NEXT", "MainActivity- callback");
+        Log.d("NEXT", "RecipeListActivity- callback");
         MasterListFragment masterListFragment = (MasterListFragment)
                 getSupportFragmentManager().findFragmentByTag(MasterListFragment.TAG);
 
