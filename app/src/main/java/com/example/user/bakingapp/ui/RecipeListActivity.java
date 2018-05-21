@@ -1,20 +1,26 @@
 package com.example.user.bakingapp.ui;
 
 
+import android.content.Intent;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.example.user.bakingapp.R;
 import com.example.user.bakingapp.RecipeClient;
+import com.example.user.bakingapp.adapter.RecipeAdapter;
 import com.example.user.bakingapp.model.Recipe;
 import com.example.user.bakingapp.utils.BakingAppConstants;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,13 +35,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 // TODO: Style- single method for prev/next buttons
 
 public class RecipeListActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener,
-        DetailFragment.OnNextStepListener {
+        DetailFragment.OnNextStepListener, RecipeAdapter.OnRecipeClickListener{
 
-    // TODO: handle only RecipeListFragment
+    // TODO: handle only RecipeList
 
 
 
     private static List<Recipe> recipeList;
+
+    @BindView(R.id.recipe_list_recycler_view)
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +54,11 @@ public class RecipeListActivity extends AppCompatActivity implements FragmentMan
 
         recipeList = new ArrayList<>();
 
-        if(savedInstanceState == null){
-            getRecipes();
-        }
+//        if(savedInstanceState == null){
+//            getRecipes();
+//        }
+
+        getRecipes();
 
     }
 
@@ -69,7 +80,8 @@ public class RecipeListActivity extends AppCompatActivity implements FragmentMan
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
                 recipeList = response.body();
 
-                startRecipeListFragment();
+                //startRecipeListFragment();
+                setUpUi();
             }
 
             @Override
@@ -78,19 +90,12 @@ public class RecipeListActivity extends AppCompatActivity implements FragmentMan
         });
     }
 
-    private void startRecipeListFragment() {
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(BakingAppConstants.KEY_RECIPE_LIST, (ArrayList<Recipe>) recipeList);
-
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        RecipeListFragment recipeListFragment = new RecipeListFragment();
-        recipeListFragment.setArguments(bundle);
-        fragmentTransaction.add(R.id.fragment_container, recipeListFragment).commit();
-
-        //Listen for changes in the back stack
-        getSupportFragmentManager().addOnBackStackChangedListener(this);
-        //Handle when activity is recreated like on orientation Change
-        shouldDisplayHomeUp();
+    private void setUpUi(){
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        RecipeAdapter adapter = new RecipeAdapter(this, recipeList, this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setHasFixedSize(true);
     }
 
     @Override
@@ -154,5 +159,20 @@ public class RecipeListActivity extends AppCompatActivity implements FragmentMan
         } else {
             Log.d("NEXT", "masterFragment null");
         }
+    }
+
+    @Override
+    public void onRecipeSelected(int position) {
+
+        Intent intent = new Intent(RecipeListActivity.this, MasterDetailActivity.class);
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(BakingAppConstants.KEY_RECIPE,
+                recipeList.get(position));
+
+        Log.d("MASTER", recipeList.get(position).toString());
+
+        intent.putExtra("recipe", bundle);
+        startActivity(intent);
     }
 }

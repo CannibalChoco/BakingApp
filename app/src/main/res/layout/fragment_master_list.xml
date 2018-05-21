@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Master list fragment layout wil hold a single RecyclerView -->
 <android.support.v7.widget.RecyclerView
     android:id="@+id/master_list_recycler_view"
     android:layout_width="wrap_content"

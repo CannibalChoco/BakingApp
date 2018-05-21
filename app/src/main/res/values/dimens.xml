@@ -6,4 +6,6 @@
 
     <dimen name="icon_dimension">48dp</dimen>
 
+    <dimen name="width_master_list">400dp</dimen>
+
 </resources>
