@@ -14,11 +14,11 @@
         <activity android:name=".ui.RecipeListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.MasterDetailActivity"/>
+        <activity android:name=".ui.MasterDetailActivity"
+            android:parentActivityName=".ui.RecipeListActivity"/>
     </application>
 
 </manifest>

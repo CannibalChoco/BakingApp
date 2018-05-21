@@ -1,12 +1,10 @@
 package com.example.user.bakingapp.ui;
 
 import android.content.Intent;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.example.user.bakingapp.R;
 import com.example.user.bakingapp.RecipeClient;
@@ -28,13 +26,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 // TODO: check network connection before doing network actions
 // TODO: refresh db once a day
 // TODO: if new recipes are found, notify user
-
-// TODO: Style- single method for prev/next buttons
-
-public class RecipeListActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener,
-        DetailFragment.OnNextStepListener, RecipeAdapter.OnRecipeClickListener{
-
-    // TODO: handle only RecipeList
+@SuppressWarnings("WeakerAccess")
+public class RecipeListActivity extends AppCompatActivity implements
+        RecipeAdapter.OnRecipeClickListener{
 
     private List<Recipe> recipeList;
 
@@ -91,69 +85,6 @@ public class RecipeListActivity extends AppCompatActivity implements FragmentMan
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
-    }
-
-    @Override
-    public void onBackStackChanged() {
-        shouldDisplayHomeUp();
-    }
-
-    /**
-     * ActionBar up navigation solution taken from:
-     * https://stackoverflow.com/a/20314570
-     */
-    public void shouldDisplayHomeUp(){
-        //Enable Up button only  if there are entries in the back stack
-        boolean canback = getSupportFragmentManager().getBackStackEntryCount()>0;
-        getSupportActionBar().setDisplayHomeAsUpEnabled(canback);
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        //This method is called when the up button is pressed. Just the pop back stack.
-        getSupportFragmentManager().popBackStack();
-        return true;
-    }
-
-//    @Override
-//    public void onStepSelected(int position) {
-//        MasterListFragment masterListFragment = (MasterListFragment)
-//                getSupportFragmentManager().findFragmentByTag(MasterListFragment.TAG);
-//
-//        if (masterListFragment != null){
-//            Log.d("NEXT", "masterFragment not null");
-//            masterListFragment.launchNextStep(position);
-//        } else {
-//            Log.d("NEXT", "masterFragment null");
-//        }
-//    }
-
-    @Override
-    public void onNextStep(int position) {
-        Log.d("NEXT", "RecipeListActivity- callback");
-        MasterListFragment masterListFragment = (MasterListFragment)
-                getSupportFragmentManager().findFragmentByTag(MasterListFragment.TAG);
-
-        if (masterListFragment != null){
-            Log.d("NEXT", "masterFragment not null");
-            masterListFragment.launchNextStep(position);
-        } else {
-            Log.d("NEXT", "masterFragment null");
-        }
-    }
-
-    @Override
-    public void onPrevStep(int position) {
-        Log.d("NEXT", "RecipeListActivity- callback");
-        MasterListFragment masterListFragment = (MasterListFragment)
-                getSupportFragmentManager().findFragmentByTag(MasterListFragment.TAG);
-
-        if (masterListFragment != null){
-            Log.d("NEXT", "masterFragment not null");
-            masterListFragment.launchNextStep(position);
-        } else {
-            Log.d("NEXT", "masterFragment null");
-        }
     }
 
     @Override

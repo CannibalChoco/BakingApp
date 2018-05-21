@@ -11,7 +11,6 @@ import com.example.user.bakingapp.R;
 import com.example.user.bakingapp.model.Step;
 
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -70,7 +69,7 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Vi
         @BindView(R.id.ingredients)
         TextView ingredients;
 
-        public ViewHolder(View itemView, OnStepClickListener listener) {
+        ViewHolder(View itemView, OnStepClickListener listener) {
             super(itemView);
             ButterKnife.bind(this, itemView);
 

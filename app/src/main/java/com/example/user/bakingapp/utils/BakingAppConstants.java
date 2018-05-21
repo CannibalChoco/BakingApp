@@ -11,5 +11,6 @@ public class BakingAppConstants {
     public static final String KEY_RECIPE_SERVINGS = "servings";
     public static final String KEY_STEP_ID = "step_id";
     public static final String KEY_ADAPTER_SIZE = "adapter_size";
+    public static final String KEY_DETAIL_ITEM_COUNT = "item_count";
 
 }

@@ -10,7 +10,6 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,19 +40,19 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+@SuppressWarnings("WeakerAccess")
 public class DetailFragment extends Fragment {
 
     public static final String TAG = DetailFragment.class.getSimpleName();
 
-    public DetailFragment(){}
-
-    public interface OnNextStepListener{
-        void onNextStep(int position);
-        void onPrevStep(int position);
-//        void onStepSelected(int position);
+    public DetailFragment() {
     }
 
-    private OnNextStepListener nextStepListener;
+    public interface OnSwitchStepClickListener {
+        void onStepSelected(int position);
+    }
+
+    private OnSwitchStepClickListener switchStepListener;
 
     private List<Ingredient> ingredients;
     private Step step;
@@ -85,9 +84,9 @@ public class DetailFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        try{
-            nextStepListener = (OnNextStepListener) context;
-        } catch (ClassCastException e){
+        try {
+            switchStepListener = (OnSwitchStepClickListener) context;
+        } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement OnNextStepListener");
         }
     }
@@ -103,14 +102,14 @@ public class DetailFragment extends Fragment {
         if (args != null) {
             getActivity().setTitle(args.getString(BakingAppConstants.KEY_RECIPE_NAME));
             // User selected ingredients
-            if(args.containsKey(BakingAppConstants.KEY_INGREDIENT_LIST)){
+            if (args.containsKey(BakingAppConstants.KEY_INGREDIENT_LIST)) {
                 stepsView.setVisibility(View.INVISIBLE);
                 // get ingredients from args
                 ingredients = args.getParcelableArrayList(BakingAppConstants.KEY_INGREDIENT_LIST);
                 stUpIngredientsView(args.getInt(BakingAppConstants.KEY_RECIPE_SERVINGS));
 
                 // user selected step
-            } else if (args.containsKey(BakingAppConstants.KEY_STEP)){
+            } else if (args.containsKey(BakingAppConstants.KEY_STEP)) {
                 ingredientsView.setVisibility(View.GONE);
 
                 step = args.getParcelable(BakingAppConstants.KEY_STEP);
@@ -119,11 +118,11 @@ public class DetailFragment extends Fragment {
                 videoUrl = step.getVideoURL();
                 boolean hasVideo = false;
 
-                if (videoUrl == null || videoUrl.isEmpty()){
+                if (videoUrl == null || videoUrl.isEmpty()) {
                     playerView.setVisibility(View.GONE);
 
                     String thumbnailUrl = step.getThumbnailURL();
-                    if (thumbnailUrl != null && !thumbnailUrl.isEmpty()){
+                    if (thumbnailUrl != null && !thumbnailUrl.isEmpty()) {
                         Picasso.with(getContext()).load(thumbnailUrl).into(thumbnailView);
                     }
                 } else {
@@ -132,11 +131,12 @@ public class DetailFragment extends Fragment {
             }
 
             stepId = args.getInt(BakingAppConstants.KEY_STEP_ID);
-            int adapterSize = args.getInt(BakingAppConstants.KEY_ADAPTER_SIZE);
+            int itemCount = args.getInt(BakingAppConstants.KEY_DETAIL_ITEM_COUNT);
 
-            if (stepId == 0){
+            // TODO: fix bug - hide "next" button on last step
+            if (stepId == 0) {
                 buttonPrev.setVisibility(View.GONE);
-            } else if (stepId > 0 && stepId + 1 == adapterSize){
+            } else if (stepId > 0 && stepId == itemCount) {
                 buttonNext.setVisibility(View.GONE);
             }
         }
@@ -148,7 +148,7 @@ public class DetailFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        if (videoUrl != null){
+        if (videoUrl != null) {
             initPlayer();
         }
     }
@@ -157,13 +157,14 @@ public class DetailFragment extends Fragment {
     public void onStop() {
         super.onStop();
 
-        if (player != null){
+        if (player != null) {
             playerView.setPlayer(null);
             player.release();
             player = null;
         }
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     private void initPlayer() {
         player = ExoPlayerFactory.newSimpleInstance(getContext(), new DefaultTrackSelector());
         playerView.setPlayer(player);
@@ -171,6 +172,7 @@ public class DetailFragment extends Fragment {
         DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
 
         // tell the exoplayer what to play
+        @SuppressWarnings("SpellCheckingInspection")
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(
                 getContext(),
                 Util.getUserAgent(getContext(), "bakingapp"),
@@ -183,28 +185,16 @@ public class DetailFragment extends Fragment {
         player.setPlayWhenReady(true);
     }
 
-    //    @OnClick(R.id.button_next)
-//    public void nextClicked(){
-//        nextStepListener.onStepSelected(stepId++);
-//    }
-//
-//    @OnClick(R.id.button_prev)
-//    public void prevClicked(){
-//        nextStepListener.onStepSelected(stepId--);
-//    }
-
     @OnClick(R.id.button_next)
-    public void onNextStepClicked(){
-        Log.d("NEXT", "next step clicked");
-        Log.d("NEXT", String.valueOf(stepId++));
-        nextStepListener.onNextStep(stepId ++);
+    public void onNextStepClicked() {
+        int nextStep = stepId + 1;
+        switchStepListener.onStepSelected(nextStep);
     }
 
     @OnClick(R.id.button_prev)
-    public void onPrevStepClicked(){
-        Log.d("NEXT", "next step clicked");
-        Log.d("NEXT", String.valueOf(stepId--));
-        nextStepListener.onPrevStep(stepId--);
+    public void onPrevStepClicked() {
+        int prevStep = stepId - 1;
+        switchStepListener.onStepSelected(prevStep);
     }
 
     /**
