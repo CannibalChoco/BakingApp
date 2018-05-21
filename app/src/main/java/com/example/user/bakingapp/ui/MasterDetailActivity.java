@@ -3,7 +3,6 @@ package com.example.user.bakingapp.ui;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.example.user.bakingapp.R;
 import com.example.user.bakingapp.model.Recipe;
@@ -20,9 +19,8 @@ public class MasterDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_master_detail);
 
-        Bundle bundle = getIntent().getExtras().getBundle("recipe");
-        Recipe r = bundle.getParcelable(BakingAppConstants.KEY_RECIPE);
-        Log.d("MASTER", r.toString());
+        Bundle bundle = getIntent().getBundleExtra(BakingAppConstants.KEY_RECIPE_BUNDLE);
+        recipe = bundle.getParcelable(BakingAppConstants.KEY_RECIPE);
 
         MasterListFragment masterListFragment = new MasterListFragment();
         masterListFragment.setArguments(bundle);

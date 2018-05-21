@@ -1,10 +1,7 @@
 package com.example.user.bakingapp.ui;
 
-
 import android.content.Intent;
-import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -39,9 +36,7 @@ public class RecipeListActivity extends AppCompatActivity implements FragmentMan
 
     // TODO: handle only RecipeList
 
-
-
-    private static List<Recipe> recipeList;
+    private List<Recipe> recipeList;
 
     @BindView(R.id.recipe_list_recycler_view)
     RecyclerView recyclerView;
@@ -49,7 +44,7 @@ public class RecipeListActivity extends AppCompatActivity implements FragmentMan
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_recipe_list);
         ButterKnife.bind(this);
 
         recipeList = new ArrayList<>();
@@ -163,16 +158,16 @@ public class RecipeListActivity extends AppCompatActivity implements FragmentMan
 
     @Override
     public void onRecipeSelected(int position) {
-
-        Intent intent = new Intent(RecipeListActivity.this, MasterDetailActivity.class);
+        Recipe recipe = recipeList.get(position);
 
         Bundle bundle = new Bundle();
-        bundle.putParcelable(BakingAppConstants.KEY_RECIPE,
-                recipeList.get(position));
+        bundle.putParcelable(BakingAppConstants.KEY_RECIPE, recipe);
 
-        Log.d("MASTER", recipeList.get(position).toString());
+        Intent intent = new Intent(RecipeListActivity.this,
+                MasterDetailActivity.class);
 
-        intent.putExtra("recipe", bundle);
+        intent.putExtra(BakingAppConstants.KEY_RECIPE_BUNDLE, bundle);
         startActivity(intent);
     }
+
 }

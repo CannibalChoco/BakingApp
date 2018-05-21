@@ -3,6 +3,7 @@ package com.example.user.bakingapp.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +21,8 @@ public class Recipe implements Parcelable{
         name = in.readString();
         servings = in.readInt();
         image = in.readString();
+        ingredients = in.createTypedArrayList(Ingredient.CREATOR);
+        steps = in.createTypedArrayList(Step.CREATOR);
     }
 
     public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
@@ -71,11 +74,11 @@ public class Recipe implements Parcelable{
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(name);
-        parcel.writeInt(servings);
-        parcel.writeString(image);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeInt(servings);
+        dest.writeString(image);
+        dest.writeTypedList(ingredients);
+        dest.writeTypedList(steps);
     }
-
-
 }
