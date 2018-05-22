@@ -1,11 +1,13 @@
 package com.example.user.bakingapp.ui;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.LinearLayout;
 
 import com.example.user.bakingapp.R;
 import com.example.user.bakingapp.RecipeClient;
@@ -29,7 +31,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 // TODO: if new recipes are found, notify user
 @SuppressWarnings("WeakerAccess")
 public class RecipeListActivity extends AppCompatActivity implements
-        RecipeAdapter.OnRecipeClickListener{
+        RecipeAdapter.OnRecipeClickListener {
 
     private List<Recipe> recipeList;
 
@@ -55,7 +57,7 @@ public class RecipeListActivity extends AppCompatActivity implements
     /**
      * gets recipe list from server asynchronously
      */
-      private void getRecipes() {
+    private void getRecipes() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(RecipeClient.RECIPE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -80,10 +82,18 @@ public class RecipeListActivity extends AppCompatActivity implements
         });
     }
 
-    private void setUpUi(){
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+    private void setUpUi() {
+        Configuration config = getResources().getConfiguration();
+        if (config.smallestScreenWidthDp >= 600){
+            GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+            recyclerView.setLayoutManager(layoutManager);
+        } else {
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+            recyclerView.setLayoutManager(layoutManager);
+        }
+
         RecipeAdapter adapter = new RecipeAdapter(this, recipeList, this);
-        recyclerView.setLayoutManager(layoutManager);
+
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
     }
