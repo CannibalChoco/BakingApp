@@ -68,8 +68,6 @@ public class MasterDetailActivity extends AppCompatActivity implements
      */
     @Override
     public void onStepClicked(int position) {
-        Log.d("DETAIL", "onStepClicked MasterDetailActivity isTwoPane = " + isTwoPane);
-        // TODO: make sure logic is correct
         if (isTwoPane) {
             startDetailFragment(position);
         } else {
@@ -84,8 +82,6 @@ public class MasterDetailActivity extends AppCompatActivity implements
      */
     @Override
     public void onStepSelected(int position) {
-        // TODO: make sure logic is correct
-        Log.d("DETAIL", "onStepSelected MasterDetailActivity isTwoPane = " + isTwoPane);
         if (isTwoPane) {
             getSupportFragmentManager().popBackStack();
             startDetailFragment(position);
@@ -134,8 +130,8 @@ public class MasterDetailActivity extends AppCompatActivity implements
 
         bundle.putString(BakingAppConstants.KEY_RECIPE_NAME, recipe.getName());
         bundle.putInt(BakingAppConstants.KEY_STEP_ID, position);
-        int itemCount = recipe.getSteps().size() + 1;
-        bundle.putInt(BakingAppConstants.KEY_DETAIL_ITEM_COUNT, itemCount);
+        int stepCount = recipe.getSteps().size();
+        bundle.putInt(BakingAppConstants.KEY_STEP_COUNT, stepCount);
 
         return bundle;
     }

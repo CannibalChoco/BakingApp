@@ -132,12 +132,11 @@ public class DetailFragment extends Fragment {
             }
 
             stepId = args.getInt(BakingAppConstants.KEY_STEP_ID);
-            int itemCount = args.getInt(BakingAppConstants.KEY_DETAIL_ITEM_COUNT);
+            int stepCount = args.getInt(BakingAppConstants.KEY_STEP_COUNT);
 
-            // TODO: fix bug - hide "next" button on last step
             if (stepId == 0) {
                 buttonPrev.setVisibility(View.GONE);
-            } else if (stepId > 0 && stepId == itemCount) {
+            } else if (stepId > 0 && stepId == stepCount - 1) {
                 buttonNext.setVisibility(View.GONE);
             }
         }

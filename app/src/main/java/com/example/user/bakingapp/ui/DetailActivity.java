@@ -12,6 +12,7 @@ import com.example.user.bakingapp.utils.BakingAppConstants;
 
 import java.util.ArrayList;
 
+// TODO: up navigation crashes app
 public class DetailActivity extends AppCompatActivity implements
         DetailFragment.OnSwitchStepClickListener{
 
@@ -75,8 +76,8 @@ public class DetailActivity extends AppCompatActivity implements
 
         bundle.putString(BakingAppConstants.KEY_RECIPE_NAME, recipe.getName());
         bundle.putInt(BakingAppConstants.KEY_STEP_ID, position);
-        int itemCount = recipe.getSteps().size() + 1;
-        bundle.putInt(BakingAppConstants.KEY_DETAIL_ITEM_COUNT, itemCount);
+        int stepCount = recipe.getSteps().size();
+        bundle.putInt(BakingAppConstants.KEY_STEP_COUNT, stepCount);
 
         return bundle;
     }

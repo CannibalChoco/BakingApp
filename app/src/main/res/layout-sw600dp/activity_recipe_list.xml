@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--Layout for RecipeListActivity's recipe list-->
+<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/small_margin"
+    android:id="@+id/recipe_list_recycler_view">
+
+</android.support.v7.widget.RecyclerView>
