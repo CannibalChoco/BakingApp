@@ -19,6 +19,8 @@
         </activity>
         <activity android:name=".ui.MasterDetailActivity"
             android:parentActivityName=".ui.RecipeListActivity"/>
+        <activity android:name=".ui.DetailActivity"
+            android:parentActivityName=".ui.MasterDetailActivity"/>
     </application>
 
 </manifest>

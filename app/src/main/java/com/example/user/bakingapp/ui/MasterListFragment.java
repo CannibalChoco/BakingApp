@@ -55,7 +55,6 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.On
         View rootView = inflater.inflate(R.layout.fragment_master_list, container, false);
         ButterKnife.bind(this, rootView);
 
-
         Bundle bundle = getArguments();
         if(bundle != null){
             recipe = getArguments().getParcelable(BakingAppConstants.KEY_RECIPE);
