@@ -30,12 +30,14 @@ public class DetailActivity extends AppCompatActivity implements
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        DetailFragment detailFragment = new DetailFragment();
-        detailFragment.setArguments(getArgsForDetailFragment(stepId));
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.detail_container, detailFragment)
-                .commit();
+        if (savedInstanceState == null){
+            DetailFragment detailFragment = new DetailFragment();
+            detailFragment.setArguments(getArgsForDetailFragment(stepId));
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.detail_container, detailFragment)
+                    .commit();
+        }
     }
 
     /**

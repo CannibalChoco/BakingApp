@@ -23,6 +23,9 @@ import com.example.user.bakingapp.adapter.IngredientAdapter;
 import com.example.user.bakingapp.model.Ingredient;
 import com.example.user.bakingapp.model.Step;
 import com.example.user.bakingapp.utils.BakingAppConstants;
+import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -45,6 +48,9 @@ import butterknife.OnClick;
 public class DetailFragment extends Fragment {
 
     public static final String TAG = DetailFragment.class.getSimpleName();
+    private static final String KEY_PLAYER_POSITION = "player_position";
+    private static final String KEY_PLAY_WHEN_READY = "play_when_ready";
+    private static final String KEY_CURRENT_WINDOW = "current_window";
 
     public DetailFragment() {
     }
@@ -60,6 +66,9 @@ public class DetailFragment extends Fragment {
     private int stepId;
     private String videoUrl;
     private SimpleExoPlayer player;
+    private long playerPosition;
+    private boolean playWhenReady;
+    private int currentWindow;
 
     @BindView(R.id.ingredients_recycler_view)
     RecyclerView recyclerViewIngredients;
@@ -98,6 +107,33 @@ public class DetailFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         ButterKnife.bind(this, rootView);
+
+
+        if (savedInstanceState != null) {
+
+            if (savedInstanceState.containsKey(KEY_PLAYER_POSITION)) {
+                playerPosition = savedInstanceState.getLong(KEY_PLAYER_POSITION);
+            } else {
+                playerPosition = C.TIME_UNSET;
+            }
+
+            if (savedInstanceState.containsKey(KEY_PLAY_WHEN_READY)) {
+                playWhenReady = savedInstanceState.getBoolean(KEY_PLAY_WHEN_READY);
+            } else {
+                playWhenReady = true;
+            }
+
+            if (savedInstanceState.containsKey(KEY_CURRENT_WINDOW)) {
+                currentWindow = savedInstanceState.getInt(KEY_CURRENT_WINDOW);
+            } else {
+                currentWindow = 0;
+            }
+        } else {
+            playerPosition = C.TIME_UNSET;
+            playWhenReady = true;
+            currentWindow = 0;
+        }
+        Log.d("PLAYER", "OnCreateView " + KEY_PLAYER_POSITION + " = " + playerPosition);
 
         Bundle args = getArguments();
         if (args != null) {
@@ -144,29 +180,80 @@ public class DetailFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     * Starting with API level 24 Android supports multiple windows. As our app can be visible but
+     * not active in split window mode, we need to initialize the player in onStart. Before API
+     * level 24 we wait as long as possible until we grab resources, so we wait until onResume
+     * before initializing the player.
+     */
     @Override
     public void onStart() {
         super.onStart();
-
-        if (videoUrl != null) {
+        if (Util.SDK_INT > 23 && videoUrl != null) {
             initPlayer();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if ((Util.SDK_INT <= 23 || player == null) && videoUrl != null) {
+            initPlayer();
+        }
+    }
+
+    /**
+     * Before API Level 24 there is no guarantee of onStop being called. So we have to release
+     * the player as early as possible in onPause. Starting with API Level 24 (which brought
+     * multi and split window mode) onStop is guaranteed to be called and in the paused mode
+     * our activity is eventually still visible. Hence we need to wait releasing until onStop.
+     */
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) {
+            Log.d("PLAYER", "onPause  release player ");
+            releasePlayer();
         }
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        if (Util.SDK_INT > 23) {
+            Log.d("PLAYER", "onStop  release player ");
+            releasePlayer();
+        }
+    }
 
+    private void releasePlayer() {
         if (player != null) {
-            playerView.setPlayer(null);
             player.release();
             player = null;
         }
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        if (player != null){
+            outState.putLong(KEY_PLAYER_POSITION, player.getCurrentPosition());
+            outState.putInt(KEY_CURRENT_WINDOW, player.getCurrentWindowIndex());
+            outState.putBoolean(KEY_PLAY_WHEN_READY, player.getPlayWhenReady());
+            Log.d("PLAYER", "onSaveInstanceState  position " + player.getCurrentPosition());
+            Log.d("PLAYER", "onSaveInstanceState  window " + player.getCurrentWindowIndex());
+            Log.d("PLAYER", "onSaveInstanceState  play when ready " + player.getPlayWhenReady());
+        }
+
+        super.onSaveInstanceState(outState);
+    }
+
     @SuppressWarnings("SpellCheckingInspection")
     private void initPlayer() {
-        player = ExoPlayerFactory.newSimpleInstance(getContext(), new DefaultTrackSelector());
+        player = ExoPlayerFactory.newSimpleInstance(
+                new DefaultRenderersFactory(getContext()),
+                new DefaultTrackSelector(),
+                new DefaultLoadControl());
+        //player = ExoPlayerFactory.newSimpleInstance(getContext(), new DefaultTrackSelector());
         playerView.setPlayer(player);
 
         DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
@@ -181,8 +268,13 @@ public class DetailFragment extends Fragment {
         MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory)
                 .createMediaSource(Uri.parse(step.getVideoURL()));
 
-        player.prepare(videoSource);
-        player.setPlayWhenReady(true);
+        player.seekTo(currentWindow, playerPosition);
+        Log.d("PLAYER", "initPlayer  seekTo " + playerPosition);
+        Log.d("PLAYER", "initPlayer  currentPosition:  " + player.getContentPosition());
+        Log.d("PLAYER", "initPlayer  playWhenReady:  " + playWhenReady);
+
+        player.prepare(videoSource, true, false);
+        player.setPlayWhenReady(playWhenReady);
     }
 
     @OnClick(R.id.button_next)
