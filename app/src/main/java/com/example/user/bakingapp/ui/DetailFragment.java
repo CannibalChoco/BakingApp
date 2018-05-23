@@ -10,7 +10,6 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,11 +54,11 @@ public class DetailFragment extends Fragment {
     public DetailFragment() {
     }
 
-    public interface OnSwitchStepClickListener {
-        void onStepSelected(int position);
+    public interface OnDetailStepClickListener {
+        void onDetailStepClicked(int position);
     }
 
-    private OnSwitchStepClickListener switchStepListener;
+    private OnDetailStepClickListener switchStepListener;
 
     private List<Ingredient> ingredients;
     private Step step;
@@ -95,7 +94,7 @@ public class DetailFragment extends Fragment {
         super.onAttach(context);
 
         try {
-            switchStepListener = (OnSwitchStepClickListener) context;
+            switchStepListener = (OnDetailStepClickListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + " must implement OnNextStepListener");
         }
@@ -107,8 +106,7 @@ public class DetailFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         ButterKnife.bind(this, rootView);
-
-
+        
         if (savedInstanceState != null) {
 
             if (savedInstanceState.containsKey(KEY_PLAYER_POSITION)) {
@@ -247,7 +245,6 @@ public class DetailFragment extends Fragment {
                 new DefaultRenderersFactory(getContext()),
                 new DefaultTrackSelector(),
                 new DefaultLoadControl());
-        //player = ExoPlayerFactory.newSimpleInstance(getContext(), new DefaultTrackSelector());
         playerView.setPlayer(player);
 
         DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
@@ -271,13 +268,13 @@ public class DetailFragment extends Fragment {
     @OnClick(R.id.button_next)
     public void onNextStepClicked() {
         int nextStep = stepId + 1;
-        switchStepListener.onStepSelected(nextStep);
+        switchStepListener.onDetailStepClicked(nextStep);
     }
 
     @OnClick(R.id.button_prev)
     public void onPrevStepClicked() {
         int prevStep = stepId - 1;
-        switchStepListener.onStepSelected(prevStep);
+        switchStepListener.onDetailStepClicked(prevStep);
     }
 
     /**

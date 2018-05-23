@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.example.user.bakingapp.R;
 import com.example.user.bakingapp.model.Recipe;
@@ -14,7 +13,7 @@ import java.util.ArrayList;
 
 // TODO: up navigation crashes app
 public class DetailActivity extends AppCompatActivity implements
-        DetailFragment.OnSwitchStepClickListener{
+        DetailFragment.OnDetailStepClickListener {
 
     private Recipe recipe;
 
@@ -45,7 +44,7 @@ public class DetailActivity extends AppCompatActivity implements
      * @param position the position of the selected step
      */
     @Override
-    public void onStepSelected(int position) {
+    public void onDetailStepClicked(int position) {
         startDetailFragment(position);
     }
 

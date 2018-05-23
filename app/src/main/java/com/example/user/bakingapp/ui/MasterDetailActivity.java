@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.example.user.bakingapp.R;
 import com.example.user.bakingapp.model.Recipe;
@@ -13,11 +12,9 @@ import com.example.user.bakingapp.utils.BakingAppConstants;
 
 import java.util.ArrayList;
 
-// TODO: fix up button for handset layout
 public class MasterDetailActivity extends AppCompatActivity implements
-        MasterListFragment.OnStepClickListener,
-        DetailFragment.OnSwitchStepClickListener {
-    // TODO: 1. Handle master-detail flow
+        MasterListFragment.OnMasterListStepClickListener,
+        DetailFragment.OnDetailStepClickListener {
 
     private boolean isTwoPane;
     private Recipe recipe;
@@ -32,33 +29,32 @@ public class MasterDetailActivity extends AppCompatActivity implements
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        addMasterListFragment(bundle);
+
+        if (findViewById(R.id.detail_container) != null) {
+            isTwoPane = true;
+            // populate detail view
+            if (savedInstanceState == null) {
+                addDetailFragment();
+            }
+            // TODO: hide buttons?
+        } else {
+            isTwoPane = false;
+        }
+    }
+
+    /**
+     * Creates a new MasterListFragment for MasterDetailActivity, sets arguments, doesn't add
+     * fragment to back stack
+     * @param bundle arguments that are passed to fragment
+     */
+    private void addMasterListFragment(Bundle bundle) {
         MasterListFragment masterListFragment = new MasterListFragment();
         masterListFragment.setArguments(bundle);
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.master_list_container, masterListFragment)
                 .commit();
-
-
-        if (findViewById(R.id.detail_container) != null) {
-            Log.d("DETAIL", "MasterDetailActivity detail_container != null");
-            isTwoPane = true;
-            // populate detail view
-            if (savedInstanceState == null) {
-                DetailFragment detailFragment = new DetailFragment();
-                detailFragment.setArguments(getArgsForDetailFragment
-                        (BakingAppConstants.DEFAULT_FRAGMENT_DETAIL_ITEM));
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .add(R.id.detail_container, detailFragment)
-                        .addToBackStack(null)
-                        .commit();
-            }
-            // TODO: hide buttons?
-        } else {
-            isTwoPane = false;
-        }
-        Log.d("DETAIL", "MasterDetailActivity onCreate isTwoPane = " + isTwoPane);
     }
 
     /**
@@ -67,9 +63,9 @@ public class MasterDetailActivity extends AppCompatActivity implements
      * @param position position of the item in the list
      */
     @Override
-    public void onStepClicked(int position) {
+    public void onMasterListStepClicked(int position) {
         if (isTwoPane) {
-            startDetailFragment(position);
+            replaceDetailFragment(position);
         } else {
             startDetailActivity(position);
         }
@@ -81,14 +77,33 @@ public class MasterDetailActivity extends AppCompatActivity implements
      * @param position the position of the selected step
      */
     @Override
-    public void onStepSelected(int position) {
+    public void onDetailStepClicked(int position) {
         if (isTwoPane) {
             getSupportFragmentManager().popBackStack();
-            startDetailFragment(position);
+            replaceDetailFragment(position);
         }
     }
 
-    private void startDetailFragment(int position) {
+    /**
+     * Adds a nes DetailFragment in master-detail view if the app is in two pane mode
+     */
+    private void addDetailFragment() {
+        DetailFragment detailFragment = new DetailFragment();
+        detailFragment.setArguments(getArgsForDetailFragment
+                (BakingAppConstants.DEFAULT_FRAGMENT_DETAIL_ITEM));
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.detail_container, detailFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    /**
+     * Replaces the existing DetailFragment with a new one. Triggered when step is selected in
+     * master list or in DetailFragment navigation
+     * @param position position of the next item to display in fragment
+     */
+    private void replaceDetailFragment(int position) {
         DetailFragment detailFragment = new DetailFragment();
         detailFragment.setArguments(getArgsForDetailFragment(position));
         getSupportFragmentManager()

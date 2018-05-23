@@ -28,10 +28,10 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.On
 
     private Recipe recipe;
 
-    private OnStepClickListener stepClickListener;
+    private OnMasterListStepClickListener stepClickListener;
 
-    public interface OnStepClickListener{
-        void onStepClicked(int position);
+    public interface OnMasterListStepClickListener {
+        void onMasterListStepClicked(int position);
     }
 
     @BindView(R.id.master_list_recycler_view)
@@ -42,9 +42,9 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.On
         super.onAttach(context);
 
         try{
-            stepClickListener = (OnStepClickListener) context;
+            stepClickListener = (OnMasterListStepClickListener) context;
         } catch (ClassCastException e){
-            throw new ClassCastException(context.toString() + " must implement OnStepClickListener");
+            throw new ClassCastException(context.toString() + " must implement OnMasterListStepClickListener");
         }
     }
 
@@ -68,7 +68,7 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.On
 
     @Override
     public void onStepSelected(int position) {
-        stepClickListener.onStepClicked(position);
+        stepClickListener.onMasterListStepClicked(position);
     }
 
     /**
