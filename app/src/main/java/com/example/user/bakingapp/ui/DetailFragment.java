@@ -133,7 +133,6 @@ public class DetailFragment extends Fragment {
             playWhenReady = true;
             currentWindow = 0;
         }
-        Log.d("PLAYER", "OnCreateView " + KEY_PLAYER_POSITION + " = " + playerPosition);
 
         Bundle args = getArguments();
         if (args != null) {
@@ -212,7 +211,6 @@ public class DetailFragment extends Fragment {
     public void onPause() {
         super.onPause();
         if (Util.SDK_INT <= 23) {
-            Log.d("PLAYER", "onPause  release player ");
             releasePlayer();
         }
     }
@@ -221,7 +219,6 @@ public class DetailFragment extends Fragment {
     public void onStop() {
         super.onStop();
         if (Util.SDK_INT > 23) {
-            Log.d("PLAYER", "onStop  release player ");
             releasePlayer();
         }
     }
@@ -239,9 +236,6 @@ public class DetailFragment extends Fragment {
             outState.putLong(KEY_PLAYER_POSITION, player.getCurrentPosition());
             outState.putInt(KEY_CURRENT_WINDOW, player.getCurrentWindowIndex());
             outState.putBoolean(KEY_PLAY_WHEN_READY, player.getPlayWhenReady());
-            Log.d("PLAYER", "onSaveInstanceState  position " + player.getCurrentPosition());
-            Log.d("PLAYER", "onSaveInstanceState  window " + player.getCurrentWindowIndex());
-            Log.d("PLAYER", "onSaveInstanceState  play when ready " + player.getPlayWhenReady());
         }
 
         super.onSaveInstanceState(outState);
@@ -269,11 +263,8 @@ public class DetailFragment extends Fragment {
                 .createMediaSource(Uri.parse(step.getVideoURL()));
 
         player.seekTo(currentWindow, playerPosition);
-        Log.d("PLAYER", "initPlayer  seekTo " + playerPosition);
-        Log.d("PLAYER", "initPlayer  currentPosition:  " + player.getContentPosition());
-        Log.d("PLAYER", "initPlayer  playWhenReady:  " + playWhenReady);
 
-        player.prepare(videoSource, true, false);
+        player.prepare(videoSource, false, false);
         player.setPlayWhenReady(playWhenReady);
     }
 
