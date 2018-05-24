@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.user.bakingapp">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="false"
@@ -11,18 +11,32 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.RecipeListActivity"
+        <activity
+            android:name=".ui.RecipeListActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.MasterDetailActivity"
+        <activity
+            android:name=".ui.MasterDetailActivity"
             android:launchMode="singleTop"
-            android:parentActivityName=".ui.RecipeListActivity"/>
-        <activity android:name=".ui.DetailActivity"
-            android:parentActivityName=".ui.MasterDetailActivity"/>
+            android:parentActivityName=".ui.RecipeListActivity" />
+        <activity
+            android:name=".ui.DetailActivity"
+            android:parentActivityName=".ui.MasterDetailActivity" />
+
+        <receiver android:name=".BakingWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/baking_widget_provider_info" />
+        </receiver>
     </application>
 
 </manifest>

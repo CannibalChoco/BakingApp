@@ -9,5 +9,7 @@
 
     <string name="label_prev">Previous</string>
     <string name="label_next">Next</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 
 </resources>
