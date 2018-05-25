@@ -137,6 +137,7 @@ public class MasterDetailActivity extends AppCompatActivity implements
         startActivity(intent);
     }
 
+
     /**
      * Create a new Bundle to hold the users selected information
      *
