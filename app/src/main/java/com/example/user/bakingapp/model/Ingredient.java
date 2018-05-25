@@ -50,6 +50,11 @@ public class Ingredient implements Parcelable {
                 '}';
     }
 
+    public String getIngredientFormatted(){
+        return quantity + " " + measure.toLowerCase() +
+                " " + ingredient;
+    }
+
     @Override
     public int describeContents() {
         return 0;

@@ -1,20 +1,33 @@
 package com.example.user.bakingapp.ui;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.example.user.bakingapp.BakingWidgetProvider;
 import com.example.user.bakingapp.R;
+import com.example.user.bakingapp.model.Ingredient;
 import com.example.user.bakingapp.model.Recipe;
 import com.example.user.bakingapp.utils.BakingAppConstants;
+import com.example.user.bakingapp.utils.SharedPreferencesUtils;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
 public class MasterDetailActivity extends AppCompatActivity implements
         MasterListFragment.OnMasterListStepClickListener,
         DetailFragment.OnDetailStepClickListener {
+
+
 
     private boolean isTwoPane;
     private Recipe recipe;
@@ -149,5 +162,34 @@ public class MasterDetailActivity extends AppCompatActivity implements
         bundle.putInt(BakingAppConstants.KEY_STEP_COUNT, stepCount);
 
         return bundle;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_pin_to_widget){
+            Log.d("WIDGET", "MasterDetailActivity- onOptionsItemSelected- action_pin_to_widget");
+
+            SharedPreferencesUtils.saveListInPreferences(this, recipe.getIngredients());
+
+            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplication());
+            int[] ids = appWidgetManager
+                    .getAppWidgetIds(new ComponentName(getApplication(), BakingWidgetProvider.class));
+
+            BakingWidgetProvider.updateAppWidgets(getApplication(), appWidgetManager, ids);
+
+            appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.widget_list_view);
+        }
+
+        super.onOptionsItemSelected(item);
+
+        return true;
     }
 }

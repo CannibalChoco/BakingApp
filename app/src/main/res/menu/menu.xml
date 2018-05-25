@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:title="@string/action_pin_to_widget"
+        android:id="@+id/action_pin_to_widget"
+        android:icon="@drawable/ic_action_show_in_widget"
+        app:showAsAction="always" />
+</menu>

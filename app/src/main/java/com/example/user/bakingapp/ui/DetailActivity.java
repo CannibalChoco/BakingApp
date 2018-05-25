@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.user.bakingapp.R;
 import com.example.user.bakingapp.model.Recipe;
@@ -81,5 +84,27 @@ public class DetailActivity extends AppCompatActivity implements
         bundle.putInt(BakingAppConstants.KEY_STEP_COUNT, stepCount);
 
         return bundle;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_pin_to_widget){
+            // TODO: send data to widget
+            Toast.makeText(this, "Show in widget", Toast.LENGTH_SHORT).show();
+
+
+        }
+
+        super.onOptionsItemSelected(item);
+
+        return true;
     }
 }
