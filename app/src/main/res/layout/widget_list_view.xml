@@ -3,11 +3,10 @@
     android:layout_height="match_parent"
     android:background="#09C">
 
-    <LinearLayout
+    <ListView
         android:id="@+id/widget_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:gravity="center"/>
 
 </FrameLayout>

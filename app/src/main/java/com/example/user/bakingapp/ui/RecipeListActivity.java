@@ -2,12 +2,17 @@ package com.example.user.bakingapp.ui;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.example.user.bakingapp.IdlingResource.SimpleIdlingResource;
 import com.example.user.bakingapp.R;
 import com.example.user.bakingapp.RecipeClient;
 import com.example.user.bakingapp.adapter.RecipeAdapter;
@@ -37,6 +42,21 @@ public class RecipeListActivity extends AppCompatActivity implements
     @BindView(R.id.recipe_list_recycler_view)
     RecyclerView recyclerView;
 
+    @Nullable
+    private SimpleIdlingResource idlingResource;
+
+    /**
+     * Only called from test, creates and returns a new {@link SimpleIdlingResource}.
+     */
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (idlingResource == null) {
+            idlingResource = new SimpleIdlingResource();
+        }
+        return idlingResource;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +69,8 @@ public class RecipeListActivity extends AppCompatActivity implements
 //            getRecipes();
 //        }
 
+        getIdlingResource();
+
         getRecipes();
 
     }
@@ -57,6 +79,10 @@ public class RecipeListActivity extends AppCompatActivity implements
      * gets recipe list from server asynchronously
      */
     private void getRecipes() {
+        if (idlingResource != null) {
+            idlingResource.setIdleState(false);
+        }
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(RecipeClient.RECIPE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -70,6 +96,10 @@ public class RecipeListActivity extends AppCompatActivity implements
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
                 recipeList = response.body();
+
+                if (idlingResource != null) {
+                    idlingResource.setIdleState(true);
+                }
 
                 //startRecipeListFragment();
                 setUpUi();

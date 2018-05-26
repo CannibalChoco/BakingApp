@@ -22,8 +22,6 @@ import java.util.List;
  */
 public class BakingWidgetProvider extends AppWidgetProvider {
 
-    static List<Ingredient> ingredients;
-
     public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
         Log.d("WIDGET", "BakingWidgetProvider- updateAppWidget");
