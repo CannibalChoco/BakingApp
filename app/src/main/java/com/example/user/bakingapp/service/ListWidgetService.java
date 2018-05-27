@@ -64,7 +64,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.list_item_widget);
         remoteViews.setTextViewText(R.id.list_item_text_view, ingredient.getIngredientFormatted());
-        Log.d("WIDGET", "widget service getViewAt");
+        Log.d("WIDGET", "widget service getViewAt " + "Ingredient: " + ingredient.getIngredientFormatted());
 
         return remoteViews;
     }
@@ -76,7 +76,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public int getViewTypeCount() {
-        return 0;
+        return 1;
     }
 
     @Override

@@ -33,7 +33,7 @@ public class BakingWidgetProvider extends AppWidgetProvider {
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_list_view);
         // set click pending intent for remote views
-        views.setOnClickPendingIntent(R.id.widget_list_view, pendingIntent);
+        //views.setOnClickPendingIntent(R.id.widget_list_view, pendingIntent);
 
         // Set the ListWidgetService to act as the adapter for the ListView
         Intent widgetServiceIntent = new Intent(context, ListWidgetService.class);
