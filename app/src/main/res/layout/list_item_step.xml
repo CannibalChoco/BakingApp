@@ -30,14 +30,18 @@
 
         <TextView
             android:id="@+id/short_description"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/standard_margin"
             android:layout_marginStart="@dimen/small_margin"
+            android:maxLines="1"
             android:ellipsize="end"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintBaseline_toBaselineOf="@+id/item_nr"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/item_nr"
-            tools:text="This is a short description of a step" />
+            tools:text="This is a short description of a step that is not fitting" />
 
         <TextView
             android:id="@+id/ingredients"
