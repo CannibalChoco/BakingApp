@@ -2,10 +2,8 @@ package com.example.user.bakingapp.service;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
-import android.widget.Toast;
 
 import com.example.user.bakingapp.R;
 import com.example.user.bakingapp.model.Ingredient;

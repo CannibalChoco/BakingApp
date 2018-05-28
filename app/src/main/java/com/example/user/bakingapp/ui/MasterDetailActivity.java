@@ -3,24 +3,20 @@ package com.example.user.bakingapp.ui;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.user.bakingapp.BakingWidgetProvider;
 import com.example.user.bakingapp.R;
-import com.example.user.bakingapp.model.Ingredient;
 import com.example.user.bakingapp.model.Recipe;
 import com.example.user.bakingapp.utils.BakingAppConstants;
 import com.example.user.bakingapp.utils.SharedPreferencesUtils;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 

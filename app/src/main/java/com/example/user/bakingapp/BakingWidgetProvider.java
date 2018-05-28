@@ -6,27 +6,18 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
 import android.widget.RemoteViews;
 
-import com.example.user.bakingapp.model.Ingredient;
 import com.example.user.bakingapp.service.ListWidgetService;
 import com.example.user.bakingapp.ui.MasterDetailActivity;
-import com.example.user.bakingapp.ui.MasterListFragment;
 import com.example.user.bakingapp.ui.RecipeListActivity;
-import com.example.user.bakingapp.utils.BakingAppConstants;
 import com.example.user.bakingapp.utils.SharedPreferencesUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Implementation of App Widget functionality.
  */
 public class BakingWidgetProvider extends AppWidgetProvider {
 
-    // TODO: get displayed recipes name to launch the recipes activity
     public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
         // Construct the RemoteViews object
