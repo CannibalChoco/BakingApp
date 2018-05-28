@@ -39,20 +39,20 @@ public class MasterDetailActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_master_detail);
 
+        Bundle bundle;
+
         // MasterDetailActivity launched from RecipeListActivity
         if (getIntent().hasExtra(BakingAppConstants.KEY_RECIPE_BUNDLE)){
-            Bundle bundle = getIntent().getBundleExtra(BakingAppConstants.KEY_RECIPE_BUNDLE);
+            bundle = getIntent().getBundleExtra(BakingAppConstants.KEY_RECIPE_BUNDLE);
             recipe = bundle.getParcelable(BakingAppConstants.KEY_RECIPE);
-
-            addMasterListFragment(bundle);
-        } else if (getIntent().hasExtra(KEY_GET_RECIPE_FROM_SHARED_PREFS)){
+        } else {
+            // MasterDetailActivity launched from Widget
             recipe = SharedPreferencesUtils.getRecipeFromPreferences(this);
-            Bundle bundle = new Bundle();
+            bundle = new Bundle();
             bundle.putParcelable(BakingAppConstants.KEY_RECIPE, recipe);
-
-            addMasterListFragment(bundle);
         }
 
+        if(savedInstanceState == null) addMasterListFragment(bundle);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -62,7 +62,6 @@ public class MasterDetailActivity extends AppCompatActivity implements
             if (savedInstanceState == null) {
                 addDetailFragment();
             }
-            // TODO: hide buttons?
         } else {
             isTwoPane = false;
         }
