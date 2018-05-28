@@ -25,6 +25,15 @@ public class SharedPreferencesUtils {
         editor.apply();
     }
 
+    public static void saveRecipeNameInPreferences (Context context, String name){
+        SharedPreferences preferences = context.getSharedPreferences(
+                BAKING_SHARED_PREFERENCES, 0);
+
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(BakingAppConstants.KEY_RECIPE_NAME, name);
+        editor.apply();
+    }
+
     public static List<Ingredient> getIngredientListFromPreferences(Context context){
         SharedPreferences preferences = context.getSharedPreferences(
                 BAKING_SHARED_PREFERENCES, 0);
@@ -32,5 +41,14 @@ public class SharedPreferencesUtils {
 
         Gson gson = new Gson();
         return gson.fromJson(json, new TypeToken<List<Ingredient>>(){}.getType());
+    }
+
+    public static String getRecipeNameFromPreferences(Context context){
+        SharedPreferences preferences = context.getSharedPreferences(
+                BAKING_SHARED_PREFERENCES, 0);
+        String json = preferences.getString(BakingAppConstants.KEY_INGREDIENT_LIST, "");
+
+        return preferences.getString(BakingAppConstants.KEY_RECIPE_NAME,
+                BakingAppConstants.DEFAULT_RECIPE_NAME_FOR_WIDGET);
     }
 }

@@ -182,6 +182,7 @@ public class MasterDetailActivity extends AppCompatActivity implements
                 return true;
             case R.id.action_pin_to_widget:
                 SharedPreferencesUtils.saveListInPreferences(this, recipe.getIngredients());
+                SharedPreferencesUtils.saveRecipeNameInPreferences(this, recipe.getName());
 
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplication());
                 int[] ids = appWidgetManager

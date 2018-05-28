@@ -12,5 +12,6 @@ public class BakingAppConstants {
     public static final String KEY_STEP_COUNT = "item_count";
 
     public static final int DEFAULT_FRAGMENT_DETAIL_ITEM = 0;
+    public static final String DEFAULT_RECIPE_NAME_FOR_WIDGET = "Recipe Ingredients";
 
 }

@@ -38,7 +38,6 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     public void onDataSetChanged() {
         // get new list
         ingredients = SharedPreferencesUtils.getIngredientListFromPreferences(context);
-
     }
 
     @Override

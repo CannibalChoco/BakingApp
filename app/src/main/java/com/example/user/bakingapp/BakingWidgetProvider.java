@@ -13,6 +13,7 @@ import com.example.user.bakingapp.model.Ingredient;
 import com.example.user.bakingapp.service.ListWidgetService;
 import com.example.user.bakingapp.ui.RecipeListActivity;
 import com.example.user.bakingapp.utils.BakingAppConstants;
+import com.example.user.bakingapp.utils.SharedPreferencesUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,10 @@ public class BakingWidgetProvider extends AppWidgetProvider {
                                 int appWidgetId) {
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_list_view);
+
+        String name = SharedPreferencesUtils.getRecipeNameFromPreferences(context);
+        // set recipe name
+        views.setTextViewText(R.id.widget_recipe_name, name);
 
         // Create Intent for launching the app
         Intent launchAppIntent = new Intent(context, RecipeListActivity.class);
