@@ -28,7 +28,8 @@ public class MasterDetailActivity extends AppCompatActivity implements
         MasterListFragment.OnMasterListStepClickListener,
         DetailFragment.OnDetailStepClickListener {
 
-
+    public static final int GET_RECIPE_FROM_SHARED_PREFS = 9321;
+    public static final String KEY_GET_RECIPE_FROM_SHARED_PREFS = "get_recipe_from_shared_prefs";
 
     private boolean isTwoPane;
     private Recipe recipe;
@@ -38,12 +39,22 @@ public class MasterDetailActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_master_detail);
 
-        Bundle bundle = getIntent().getBundleExtra(BakingAppConstants.KEY_RECIPE_BUNDLE);
-        recipe = bundle.getParcelable(BakingAppConstants.KEY_RECIPE);
+        // MasterDetailActivity launched from RecipeListActivity
+        if (getIntent().hasExtra(BakingAppConstants.KEY_RECIPE_BUNDLE)){
+            Bundle bundle = getIntent().getBundleExtra(BakingAppConstants.KEY_RECIPE_BUNDLE);
+            recipe = bundle.getParcelable(BakingAppConstants.KEY_RECIPE);
+
+            addMasterListFragment(bundle);
+        } else if (getIntent().hasExtra(KEY_GET_RECIPE_FROM_SHARED_PREFS)){
+            recipe = SharedPreferencesUtils.getRecipeFromPreferences(this);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(BakingAppConstants.KEY_RECIPE, recipe);
+
+            addMasterListFragment(bundle);
+        }
+
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        addMasterListFragment(bundle);
 
         if (findViewById(R.id.detail_container) != null) {
             isTwoPane = true;
@@ -183,6 +194,7 @@ public class MasterDetailActivity extends AppCompatActivity implements
             case R.id.action_pin_to_widget:
                 SharedPreferencesUtils.saveListInPreferences(this, recipe.getIngredients());
                 SharedPreferencesUtils.saveRecipeNameInPreferences(this, recipe.getName());
+                SharedPreferencesUtils.saveRecipeInPreferences(this, recipe);
 
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplication());
                 int[] ids = appWidgetManager

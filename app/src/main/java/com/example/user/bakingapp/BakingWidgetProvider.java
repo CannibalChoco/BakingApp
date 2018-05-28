@@ -11,6 +11,8 @@ import android.widget.RemoteViews;
 
 import com.example.user.bakingapp.model.Ingredient;
 import com.example.user.bakingapp.service.ListWidgetService;
+import com.example.user.bakingapp.ui.MasterDetailActivity;
+import com.example.user.bakingapp.ui.MasterListFragment;
 import com.example.user.bakingapp.ui.RecipeListActivity;
 import com.example.user.bakingapp.utils.BakingAppConstants;
 import com.example.user.bakingapp.utils.SharedPreferencesUtils;
@@ -34,12 +36,15 @@ public class BakingWidgetProvider extends AppWidgetProvider {
         views.setTextViewText(R.id.widget_recipe_name, name);
 
         // Create Intent for launching the app
-        Intent launchAppIntent = new Intent(context, RecipeListActivity.class);
+        Intent launchActivityIntent = new Intent(context, MasterDetailActivity.class);
+        launchActivityIntent.putExtra(MasterDetailActivity.KEY_GET_RECIPE_FROM_SHARED_PREFS,
+                MasterDetailActivity.GET_RECIPE_FROM_SHARED_PREFS);
 
-        PendingIntent launchAppPendingIntent = PendingIntent.getActivity(context, 0,
-                launchAppIntent, 0);
-        // set click pending intent template for remote views
-        views.setOnClickPendingIntent(R.id.widget_recipe_name, launchAppPendingIntent);
+        PendingIntent launchActivityPendingIntent = PendingIntent.getActivity(context,
+                0, launchActivityIntent, 0);
+
+        // set click pending intent for recipe name
+        views.setOnClickPendingIntent(R.id.widget_recipe_name, launchActivityPendingIntent);
 
         // Set the ListWidgetService to act as the adapter for the ListView
         Intent widgetServiceIntent = new Intent(context, ListWidgetService.class);
@@ -81,28 +86,5 @@ public class BakingWidgetProvider extends AppWidgetProvider {
         a temporary database.
          */
     }
-
-//    @Override
-//    public void onReceive(Context context, Intent intent) {
-//        super.onReceive(context, intent);
-//
-//        if (intent.getAction() == AppWidgetManager.ACTION_APPWIDGET_UPDATE){
-//            int[] ids = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
-//            if(intent.hasExtra(BakingAppConstants.KEY_RECIPE_BUNDLE)){
-//                Log.d("WIDGET", "widget provider intent has recipe bundle");
-//                Bundle bundle = intent.getBundleExtra(BakingAppConstants.KEY_RECIPE_BUNDLE);
-//                if(ingredients != null && !ingredients.isEmpty()){
-//                    ingredients.clear();
-//                }
-//                ingredients = bundle.getParcelableArrayList(BakingAppConstants.KEY_INGREDIENT_LIST);
-//
-//                if (ids != null && ids.length > 0){
-//                    this.onUpdate(context, AppWidgetManager.getInstance(context), ids);
-//                }
-//
-//            }
-//        }
-//
-//    }
 }
 
