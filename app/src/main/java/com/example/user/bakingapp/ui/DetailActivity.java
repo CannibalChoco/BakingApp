@@ -106,8 +106,6 @@ public class DetailActivity extends AppCompatActivity implements
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
             case R.id.action_pin_to_widget:
-                SharedPreferencesUtils.saveListInPreferences(this, recipe.getIngredients());
-                SharedPreferencesUtils.saveRecipeNameInPreferences(this, recipe.getName());
                 SharedPreferencesUtils.saveRecipeInPreferences(this, recipe);
 
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplication());

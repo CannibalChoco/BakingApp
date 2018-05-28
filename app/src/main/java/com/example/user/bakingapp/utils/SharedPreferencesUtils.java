@@ -26,26 +26,26 @@ public class SharedPreferencesUtils {
         editor.apply();
     }
 
-    public static void saveListInPreferences(Context context, List<Ingredient> ingredients){
-        Gson gson = new Gson();
-        String json = gson.toJson(ingredients);
-
-        SharedPreferences preferences = context.getSharedPreferences(
-                BAKING_SHARED_PREFERENCES, 0);
-
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(BakingAppConstants.KEY_INGREDIENT_LIST, json);
-        editor.apply();
-    }
-
-    public static void saveRecipeNameInPreferences (Context context, String name){
-        SharedPreferences preferences = context.getSharedPreferences(
-                BAKING_SHARED_PREFERENCES, 0);
-
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(BakingAppConstants.KEY_RECIPE_NAME, name);
-        editor.apply();
-    }
+//    public static void saveListInPreferences(Context context, List<Ingredient> ingredients){
+//        Gson gson = new Gson();
+//        String json = gson.toJson(ingredients);
+//
+//        SharedPreferences preferences = context.getSharedPreferences(
+//                BAKING_SHARED_PREFERENCES, 0);
+//
+//        SharedPreferences.Editor editor = preferences.edit();
+//        editor.putString(BakingAppConstants.KEY_INGREDIENT_LIST, json);
+//        editor.apply();
+//    }
+//
+//    public static void saveRecipeNameInPreferences (Context context, String name){
+//        SharedPreferences preferences = context.getSharedPreferences(
+//                BAKING_SHARED_PREFERENCES, 0);
+//
+//        SharedPreferences.Editor editor = preferences.edit();
+//        editor.putString(BakingAppConstants.KEY_RECIPE_NAME, name);
+//        editor.apply();
+//    }
 
     public static Recipe getRecipeFromPreferences(Context context){
         SharedPreferences preferences = context.getSharedPreferences(
@@ -58,21 +58,11 @@ public class SharedPreferencesUtils {
     }
 
     public static List<Ingredient> getIngredientListFromPreferences(Context context){
-        SharedPreferences preferences = context.getSharedPreferences(
-                BAKING_SHARED_PREFERENCES, 0);
-        String json = preferences.getString(BakingAppConstants.KEY_INGREDIENT_LIST, "");
-
-        Gson gson = new Gson();
-        return gson.fromJson(json, new TypeToken<List<Ingredient>>(){}.getType());
+        return getRecipeFromPreferences(context).getIngredients();
     }
 
     public static String getRecipeNameFromPreferences(Context context){
-        SharedPreferences preferences = context.getSharedPreferences(
-                BAKING_SHARED_PREFERENCES, 0);
-        String json = preferences.getString(BakingAppConstants.KEY_INGREDIENT_LIST, "");
-
-        return preferences.getString(BakingAppConstants.KEY_RECIPE_NAME,
-                BakingAppConstants.DEFAULT_RECIPE_NAME_FOR_WIDGET);
+        return getRecipeFromPreferences(context).getName();
     }
 
 }
