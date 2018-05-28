@@ -1,6 +1,7 @@
 package com.example.user.bakingapp;
 
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
@@ -40,11 +41,15 @@ public class BakingWidgetProvider extends AppWidgetProvider {
         launchActivityIntent.putExtra(MasterDetailActivity.KEY_GET_RECIPE_FROM_SHARED_PREFS,
                 MasterDetailActivity.GET_RECIPE_FROM_SHARED_PREFS);
 
-        PendingIntent launchActivityPendingIntent = PendingIntent.getActivity(context,
-                0, launchActivityIntent, 0);
+        // go to RecipeListActivity when click back or up
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+        stackBuilder.addParentStack(RecipeListActivity.class);
+        stackBuilder.addNextIntentWithParentStack(launchActivityIntent);
+        PendingIntent backStackPendingIntent = stackBuilder.getPendingIntent(0,
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
         // set click pending intent for recipe name
-        views.setOnClickPendingIntent(R.id.widget_recipe_name, launchActivityPendingIntent);
+        views.setOnClickPendingIntent(R.id.widget_recipe_name, backStackPendingIntent);
 
         // Set the ListWidgetService to act as the adapter for the ListView
         Intent widgetServiceIntent = new Intent(context, ListWidgetService.class);
