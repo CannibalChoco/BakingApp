@@ -14,4 +14,6 @@
 
     <string name="action_pin_to_widget">pin_to_widget</string>
 
+    <string name="msg_pinned_toWidget">Ingredients pinned to widget</string>
+
 </resources>

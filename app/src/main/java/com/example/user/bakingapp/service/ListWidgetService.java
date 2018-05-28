@@ -2,13 +2,13 @@ package com.example.user.bakingapp.service;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+import android.widget.Toast;
 
 import com.example.user.bakingapp.R;
 import com.example.user.bakingapp.model.Ingredient;
-import com.example.user.bakingapp.utils.BakingAppConstants;
 import com.example.user.bakingapp.utils.SharedPreferencesUtils;
 
 import java.util.List;
@@ -17,7 +17,6 @@ public class ListWidgetService extends RemoteViewsService {
 
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        Log.d("WIDGET", "ListWidgetService- onGetViewFactory");
         return new ListRemoteViewsFactory(getApplicationContext());
     }
 }
@@ -28,23 +27,18 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     private Context context;
 
     public ListRemoteViewsFactory(Context applicationContext) {
-        Log.d("WIDGET", "ListRemoteViewsFactory- constructor");
         this.context = applicationContext;
     }
 
     @Override
     public void onCreate() {
-        Log.d("WIDGET", "ListRemoteViewsFactory- onCreate");
     }
 
     @Override
     public void onDataSetChanged() {
-        // TODO: get new list
-        Log.d("WIDGET", "ListRemoteViewsFactory- onDataSetChanged");
+        // get new list
         ingredients = SharedPreferencesUtils.getIngredientListFromPreferences(context);
-        if(ingredients != null && !ingredients.isEmpty()){
-            Log.d("WIDGET", "ListRemoteViewsFactory- onDataSetChanged list not empty");
-        }
+
     }
 
     @Override
@@ -64,7 +58,6 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.list_item_widget);
         remoteViews.setTextViewText(R.id.list_item_text_view, ingredient.getIngredientFormatted());
-        Log.d("WIDGET", "widget service getViewAt " + "Ingredient: " + ingredient.getIngredientFormatted());
 
         return remoteViews;
     }

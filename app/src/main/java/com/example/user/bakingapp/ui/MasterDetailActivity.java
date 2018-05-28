@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -175,22 +176,27 @@ public class MasterDetailActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_pin_to_widget){
-            Log.d("WIDGET", "MasterDetailActivity- onOptionsItemSelected- action_pin_to_widget");
+        switch (id){
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            case R.id.action_pin_to_widget:
+                SharedPreferencesUtils.saveListInPreferences(this, recipe.getIngredients());
 
-            SharedPreferencesUtils.saveListInPreferences(this, recipe.getIngredients());
+                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplication());
+                int[] ids = appWidgetManager
+                        .getAppWidgetIds(new ComponentName(getApplication(), BakingWidgetProvider.class));
 
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplication());
-            int[] ids = appWidgetManager
-                    .getAppWidgetIds(new ComponentName(getApplication(), BakingWidgetProvider.class));
+                BakingWidgetProvider.updateAppWidgets(getApplication(), appWidgetManager, ids);
+                appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.widget_list_view);
 
-            BakingWidgetProvider.updateAppWidgets(getApplication(), appWidgetManager, ids);
+                Toast.makeText(this, R.string.msg_pinned_toWidget, Toast.LENGTH_SHORT).show();
 
-            appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.widget_list_view);
+                return true;
         }
 
         super.onOptionsItemSelected(item);
 
-        return true;
+        return false;
     }
 }

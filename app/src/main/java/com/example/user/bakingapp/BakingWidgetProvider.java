@@ -22,18 +22,19 @@ import java.util.List;
  */
 public class BakingWidgetProvider extends AppWidgetProvider {
 
+    // TODO: get displayed recipes name to launch the recipes activity
     public static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
-        Log.d("WIDGET", "BakingWidgetProvider- updateAppWidget");
-        // Create Intent for launching the app
-        Intent intent = new Intent(context, RecipeListActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent,
-                0);
-
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_list_view);
-        // set click pending intent for remote views
-        //views.setOnClickPendingIntent(R.id.widget_list_view, pendingIntent);
+
+        // Create Intent for launching the app
+        Intent launchAppIntent = new Intent(context, RecipeListActivity.class);
+
+        PendingIntent launchAppPendingIntent = PendingIntent.getActivity(context, 0,
+                launchAppIntent, 0);
+        // set click pending intent template for remote views
+        views.setOnClickPendingIntent(R.id.widget_recipe_name, launchAppPendingIntent);
 
         // Set the ListWidgetService to act as the adapter for the ListView
         Intent widgetServiceIntent = new Intent(context, ListWidgetService.class);
@@ -45,17 +46,14 @@ public class BakingWidgetProvider extends AppWidgetProvider {
 
     public static void updateAppWidgets (Context context, AppWidgetManager appWidgetManager,
                                          int[] appWidgetIds){
-        Log.d("WIDGET", "BakingWidgetProvider- updateAppWidgets");
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
     }
 
-    // TODO 1: initial setup + updates on any further changes
     // called when the widget is first added, and in intervals defined in provider_info.xml
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        Log.d("WIDGET", "BakingWidgetProvider- onUpdate");
         // There may be multiple widgets active, so update all of them
         updateAppWidgets(context, appWidgetManager, appWidgetIds);
     }

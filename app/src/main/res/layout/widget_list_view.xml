@@ -1,7 +1,18 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="#09C">
+
+    <TextView
+        android:id="@+id/widget_recipe_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:layout_margin="@dimen/small_margin"
+        android:text="Recipe name"/>
 
     <ListView
         android:id="@+id/widget_list_view"
@@ -9,4 +20,4 @@
         android:layout_height="match_parent"
         android:gravity="center"/>
 
-</FrameLayout>
+</LinearLayout>

@@ -1,16 +1,21 @@
 package com.example.user.bakingapp.ui;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.user.bakingapp.BakingWidgetProvider;
 import com.example.user.bakingapp.R;
 import com.example.user.bakingapp.model.Recipe;
 import com.example.user.bakingapp.utils.BakingAppConstants;
+import com.example.user.bakingapp.utils.SharedPreferencesUtils;
 
 import java.util.ArrayList;
 
@@ -96,15 +101,27 @@ public class DetailActivity extends AppCompatActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_pin_to_widget){
-            // TODO: send data to widget
-            Toast.makeText(this, "Show in widget", Toast.LENGTH_SHORT).show();
+        switch (id){
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            case R.id.action_pin_to_widget:
+                SharedPreferencesUtils.saveListInPreferences(this, recipe.getIngredients());
 
+                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplication());
+                int[] ids = appWidgetManager
+                        .getAppWidgetIds(new ComponentName(getApplication(), BakingWidgetProvider.class));
 
+                BakingWidgetProvider.updateAppWidgets(getApplication(), appWidgetManager, ids);
+                appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.widget_list_view);
+
+                Toast.makeText(this, R.string.msg_pinned_toWidget, Toast.LENGTH_SHORT).show();
+
+                return true;
         }
 
         super.onOptionsItemSelected(item);
 
-        return true;
+        return false;
     }
 }
