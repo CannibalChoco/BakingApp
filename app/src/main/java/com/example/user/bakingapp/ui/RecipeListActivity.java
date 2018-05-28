@@ -101,7 +101,6 @@ public class RecipeListActivity extends AppCompatActivity implements
                     idlingResource.setIdleState(true);
                 }
 
-                //startRecipeListFragment();
                 setUpUi();
             }
 
