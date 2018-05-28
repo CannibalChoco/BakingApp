@@ -39,6 +39,8 @@ public class MasterDetailActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_master_detail);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         Bundle bundle;
 
         // MasterDetailActivity launched from RecipeListActivity
@@ -53,8 +55,6 @@ public class MasterDetailActivity extends AppCompatActivity implements
         }
 
         if(savedInstanceState == null) addMasterListFragment(bundle);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (findViewById(R.id.detail_container) != null) {
             isTwoPane = true;
@@ -192,14 +192,7 @@ public class MasterDetailActivity extends AppCompatActivity implements
                 return true;
             case R.id.action_pin_to_widget:
                 SharedPreferencesUtils.saveRecipeInPreferences(this, recipe);
-
-                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplication());
-                int[] ids = appWidgetManager
-                        .getAppWidgetIds(new ComponentName(getApplication(), BakingWidgetProvider.class));
-
-                BakingWidgetProvider.updateAppWidgets(getApplication(), appWidgetManager, ids);
-                appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.widget_list_view);
-
+                updateWidget();
                 Toast.makeText(this, R.string.msg_pinned_toWidget, Toast.LENGTH_SHORT).show();
 
                 return true;
@@ -208,5 +201,18 @@ public class MasterDetailActivity extends AppCompatActivity implements
         super.onOptionsItemSelected(item);
 
         return false;
+    }
+
+    /**
+     * Get instance of AppWidgetManager and call WidgetProviders updateAppWidgets()
+     * Notify remote adapter to update widget data
+     */
+    private void updateWidget() {
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplication());
+        int[] ids = appWidgetManager
+                .getAppWidgetIds(new ComponentName(getApplication(), BakingWidgetProvider.class));
+
+        BakingWidgetProvider.updateAppWidgets(getApplication(), appWidgetManager, ids);
+        appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.widget_list_view);
     }
 }

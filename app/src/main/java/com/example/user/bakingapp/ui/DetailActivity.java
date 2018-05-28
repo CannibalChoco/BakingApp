@@ -30,21 +30,24 @@ public class DetailActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        Bundle bundle = getIntent().getBundleExtra(BakingAppConstants.KEY_RECIPE_BUNDLE);
-        recipe = bundle.getParcelable(BakingAppConstants.KEY_RECIPE);
-
-        int stepId = bundle.getInt(BakingAppConstants.KEY_STEP_ID);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        Bundle bundle = getIntent().getBundleExtra(BakingAppConstants.KEY_RECIPE_BUNDLE);
+        recipe = bundle.getParcelable(BakingAppConstants.KEY_RECIPE);
+        int stepId = bundle.getInt(BakingAppConstants.KEY_STEP_ID);
+
         if (savedInstanceState == null){
-            DetailFragment detailFragment = new DetailFragment();
-            detailFragment.setArguments(getArgsForDetailFragment(stepId));
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.detail_container, detailFragment)
-                    .commit();
+            addDetailFragment(stepId);
         }
+    }
+
+    private void addDetailFragment(int stepId) {
+        DetailFragment detailFragment = new DetailFragment();
+        detailFragment.setArguments(getArgsForDetailFragment(stepId));
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.detail_container, detailFragment)
+                .commit();
     }
 
     /**
@@ -107,14 +110,7 @@ public class DetailActivity extends AppCompatActivity implements
                 return true;
             case R.id.action_pin_to_widget:
                 SharedPreferencesUtils.saveRecipeInPreferences(this, recipe);
-
-                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplication());
-                int[] ids = appWidgetManager
-                        .getAppWidgetIds(new ComponentName(getApplication(), BakingWidgetProvider.class));
-
-                BakingWidgetProvider.updateAppWidgets(getApplication(), appWidgetManager, ids);
-                appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.widget_list_view);
-
+                updateWidget();
                 Toast.makeText(this, R.string.msg_pinned_toWidget, Toast.LENGTH_SHORT).show();
 
                 return true;
@@ -123,5 +119,18 @@ public class DetailActivity extends AppCompatActivity implements
         super.onOptionsItemSelected(item);
 
         return false;
+    }
+
+    /**
+     * Get instance of AppWidgetManager and call WidgetProviders updateAppWidgets()
+     * Notify remote adapter to update widget data
+     */
+    private void updateWidget() {
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplication());
+        int[] ids = appWidgetManager
+                .getAppWidgetIds(new ComponentName(getApplication(), BakingWidgetProvider.class));
+
+        BakingWidgetProvider.updateAppWidgets(getApplication(), appWidgetManager, ids);
+        appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.widget_list_view);
     }
 }
