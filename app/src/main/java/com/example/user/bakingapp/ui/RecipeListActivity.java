@@ -31,8 +31,6 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 // TODO: check network connection before doing network actions
-// TODO: refresh db once a day
-// TODO: if new recipes are found, notify user
 @SuppressWarnings("WeakerAccess")
 public class RecipeListActivity extends AppCompatActivity implements
         RecipeAdapter.OnRecipeClickListener {
@@ -96,12 +94,11 @@ public class RecipeListActivity extends AppCompatActivity implements
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
                 recipeList = response.body();
+                setUpUi();
 
                 if (idlingResource != null) {
                     idlingResource.setIdleState(true);
                 }
-
-                setUpUi();
             }
 
             @Override
@@ -137,6 +134,10 @@ public class RecipeListActivity extends AppCompatActivity implements
                 MasterDetailActivity.class);
 
         intent.putExtra(BakingAppConstants.KEY_RECIPE_BUNDLE, bundle);
+
+        if (idlingResource != null) {
+            idlingResource.setIdleState(false);
+        }
         startActivity(intent);
     }
 
