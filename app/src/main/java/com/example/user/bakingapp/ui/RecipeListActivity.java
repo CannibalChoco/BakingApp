@@ -135,9 +135,6 @@ public class RecipeListActivity extends AppCompatActivity implements
 
         intent.putExtra(BakingAppConstants.KEY_RECIPE_BUNDLE, bundle);
 
-        if (idlingResource != null) {
-            idlingResource.setIdleState(false);
-        }
         startActivity(intent);
     }
 

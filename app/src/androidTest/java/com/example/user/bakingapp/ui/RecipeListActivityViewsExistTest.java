@@ -16,22 +16,18 @@ import com.example.user.bakingapp.R;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.hamcrest.core.IsInstanceOf;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.anything;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -41,15 +37,14 @@ public class RecipeListActivityViewsExistTest {
     public ActivityTestRule<RecipeListActivity> recipeListActivityActivityTestRule
             = new ActivityTestRule<>(RecipeListActivity.class);
 
-//    private IdlingResource idlingResource;
-//
-//    @Before
-//    public void registerIdlingResource(){
-//        idlingResource = recipeListActivityActivityTestRule.getActivity().getIdlingResource();
-//        IdlingRegistry.getInstance().register(idlingResource);
-//    }
+    private IdlingResource idlingResource;
 
-    // passes
+    @Before
+    public void registerIdlingResource() {
+        idlingResource = recipeListActivityActivityTestRule.getActivity().getIdlingResource();
+        IdlingRegistry.getInstance().register(idlingResource);
+    }
+
     @Test
     public void recipeListActivityDisplaysAppNameInActionBar(){
         ViewInteraction textView = onView(
@@ -64,7 +59,6 @@ public class RecipeListActivityViewsExistTest {
         textView.check(matches(withText("Baking App")));
     }
 
-    // passes
     @Test
     public void recipeListRecyclerViewIsDisplayed(){
         onView(withId(R.id.recipe_list_recycler_view)).check(matches(isDisplayed()));
@@ -94,12 +88,12 @@ public class RecipeListActivityViewsExistTest {
 
     }
 
-//    @After
-//    public void unregisterIdlingResource(){
-//        if(idlingResource != null){
-//            IdlingRegistry.getInstance().unregister(idlingResource);
-//        }
-//    }
+    @After
+    public void unregisterIdlingResource() {
+        if (idlingResource != null){
+            IdlingRegistry.getInstance().unregister(idlingResource);
+        }
+    }
 
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
