@@ -13,4 +13,13 @@
     <color name="colorTextPrimary">#000000</color>
     <color name="colorTextSecondary">#ffffff</color>
     <color name="colorTextPrimaryLight">#424242</color>
+
+    <!-- Transparent colors -->
+    <color name="colorPrimaryLightTransparent_50">#80ff6090</color>
+    <color name="colorPrimaryDarkTransparent_50">#80b0003a</color>
+
+    <color name="colorSecondaryLightTransparent_50">#80ff5131</color>
+    <color name="colorSecondaryDarkTransparent_50">#809c0000</color>
+
+
 </resources>

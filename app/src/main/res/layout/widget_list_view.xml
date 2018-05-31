@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#80ffffff">
+    android:background="@drawable/gradient_background_transparent">
 
     <TextView
         android:id="@+id/widget_recipe_name"
@@ -15,14 +15,17 @@
         android:paddingTop="@dimen/small_margin"
         android:textColor="@color/colorTextSecondary"
         android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+        android:textSize="26sp"
         tools:text="Recipe name"
-        android:background="@drawable/gradient_background"/>
+        android:background="@drawable/gradient_background_transparent"/>
 
     <ListView
+        android:paddingTop="@dimen/small_margin"
         android:id="@+id/widget_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:divider="@null"/>
+        android:divider="@null"
+        android:paddingBottom="@dimen/small_margin"/>
 
 </LinearLayout>
