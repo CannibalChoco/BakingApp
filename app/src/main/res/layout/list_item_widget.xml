@@ -13,7 +13,7 @@
         style="@style/WidgetListItem"
         android:layout_width="0dp"
         android:layout_weight="8"
-        android:layout_marginLeft="@dimen/standard_margin"
+        android:layout_marginStart="@dimen/standard_margin"
         tools:text="unsalted butter" />
 
     <TextView

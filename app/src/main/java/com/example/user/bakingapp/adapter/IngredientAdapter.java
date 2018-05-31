@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.example.user.bakingapp.R;
@@ -37,9 +38,8 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
     public void onBindViewHolder(@NonNull IngredientAdapter.ViewHolder holder, int position) {
         Ingredient ingredient = ingredients.get(position);
 
-        holder.measure.setText(ingredient.getMeasureUnit());
-        holder.name.setText(ingredient.getIngredient());
-        holder.quantity.setText(String.valueOf(ingredient.getQuantity()));
+        holder.checkBox.setText(ingredient.getIngredient());
+        holder.quantityWithMeasure.setText(ingredient.getQuantityWithMeasure());
     }
 
     @Override
@@ -49,9 +49,10 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
-        @BindView(R.id.name) TextView name;
-        @BindView(R.id.measure) TextView measure;
-        @BindView(R.id.quantity) TextView quantity;
+        @BindView(R.id.ingredient) TextView name;
+        @BindView(R.id.quantity_with_measure) TextView quantityWithMeasure;
+        @BindView(R.id.checkBox)
+        CheckBox checkBox;
 
         ViewHolder(View itemView) {
             super(itemView);
