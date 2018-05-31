@@ -49,7 +49,6 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
-        @BindView(R.id.ingredient) TextView name;
         @BindView(R.id.quantity_with_measure) TextView quantityWithMeasure;
         @BindView(R.id.checkBox)
         CheckBox checkBox;
