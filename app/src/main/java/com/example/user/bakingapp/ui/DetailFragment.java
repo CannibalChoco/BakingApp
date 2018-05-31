@@ -79,10 +79,18 @@ public class DetailFragment extends Fragment {
     ConstraintLayout stepsView;
     @BindView(R.id.step_description)
     TextView stepDescription;
-    @BindView(R.id.button_prev)
-    Button buttonPrev;
-    @BindView(R.id.button_next)
-    Button buttonNext;
+
+    @BindView(R.id.nav_current_step)
+    TextView currentStepTextView;
+    @BindView(R.id.nav_icon_next_step)
+    ImageView nextStepImageView;
+    @BindView(R.id.nav_icon_prev_step)
+    ImageView prevStepImageView;
+    @BindView(R.id.nav_next_step_text)
+    TextView nextStepTextView;
+    @BindView(R.id.nav_prev_step_text)
+    TextView prevStepTextView;
+
     @BindView(R.id.player_view)
     PlayerView playerView;
     @BindView(R.id.thumbnail_view)
@@ -168,9 +176,11 @@ public class DetailFragment extends Fragment {
             int stepCount = args.getInt(BakingAppConstants.KEY_STEP_COUNT);
 
             if (stepId == 0) {
-                buttonPrev.setVisibility(View.GONE);
+                prevStepImageView.setVisibility(View.GONE);
+                prevStepTextView.setVisibility(View.GONE);
             } else if (stepId > 0 && stepId == stepCount - 1) {
-                buttonNext.setVisibility(View.GONE);
+                nextStepImageView.setVisibility(View.GONE);
+                nextStepTextView.setVisibility(View.GONE);
             }
         }
 
@@ -265,17 +275,18 @@ public class DetailFragment extends Fragment {
         player.setPlayWhenReady(playWhenReady);
     }
 
-    @OnClick(R.id.button_next)
+    @OnClick({R.id.nav_next_step_text, R.id.nav_icon_next_step})
     public void onNextStepClicked() {
         int nextStep = stepId + 1;
         switchStepListener.onDetailStepClicked(nextStep);
     }
 
-    @OnClick(R.id.button_prev)
+    @OnClick({R.id.nav_prev_step_text, R.id.nav_icon_prev_step})
     public void onPrevStepClicked() {
         int prevStep = stepId - 1;
         switchStepListener.onDetailStepClicked(prevStep);
     }
+
 
     /**
      * Set up everything needed for the Ingredient view
