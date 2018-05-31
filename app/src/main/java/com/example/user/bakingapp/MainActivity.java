@@ -1,8 +1,5 @@
 package com.example.user.bakingapp;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Observer;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,11 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.example.user.bakingapp.data.database.AppDatabase;
-import com.example.user.bakingapp.model.Ingredient;
 import com.example.user.bakingapp.model.Recipe;
-import com.example.user.bakingapp.model.Step;
-import com.example.user.bakingapp.utils.AppExecutors;
-import com.example.user.bakingapp.utils.NetworkUtils;
 
 import java.util.ArrayList;
 import java.util.List;
