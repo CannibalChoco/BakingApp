@@ -1,54 +1,33 @@
 package com.example.user.bakingapp.model;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
-import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-@Entity(tableName = "step",
-        foreignKeys = {@ForeignKey(
-                entity = Recipe.class,
-                parentColumns = "id",
-                childColumns = "parent_id")})
-public class Step {
+public class Step implements Parcelable{
 
-    @PrimaryKey(autoGenerate = true)
-    private long id;
-    @ColumnInfo(name = "parent_id")
-    long parentId;
     private String shortDescription;
     private String description;
     private String videoURL;
     private String thumbnailURL;
 
-    public Step(long id, long parentId, String shortDescription, String description,
-                String videoURL, String thumbnailURL) {
-        this.id = id;
-        this.parentId = parentId;
-        this.shortDescription = shortDescription;
-        this.description = description;
-        this.videoURL = videoURL;
-        this.thumbnailURL = thumbnailURL;
+    protected Step(Parcel in) {
+        shortDescription = in.readString();
+        description = in.readString();
+        videoURL = in.readString();
+        thumbnailURL = in.readString();
     }
 
-    @Ignore
-    public Step(long parentId, String shortDescription, String description, String videoURL,
-                String thumbnailURL) {
-        this.parentId = parentId;
-        this.shortDescription = shortDescription;
-        this.description = description;
-        this.videoURL = videoURL;
-        this.thumbnailURL = thumbnailURL;
-    }
+    public static final Creator<Step> CREATOR = new Creator<Step>() {
+        @Override
+        public Step createFromParcel(Parcel in) {
+            return new Step(in);
+        }
 
-    public long getId() {
-        return id;
-    }
-
-    public long getParentId() {
-        return parentId;
-    }
+        @Override
+        public Step[] newArray(int size) {
+            return new Step[size];
+        }
+    };
 
     public String getShortDescription() {
         return shortDescription;
@@ -59,22 +38,43 @@ public class Step {
     }
 
     public String getVideoURL() {
-        return videoURL;
+        if (videoURL != null && !videoURL.isEmpty()) return videoURL;
+
+        return getThumbnailVideo();
     }
 
     public String getThumbnailURL() {
-        return thumbnailURL;
+        return  (thumbnailFormatValid(thumbnailURL)) ? thumbnailURL : null;
     }
 
     @Override
     public String toString() {
         return "Step{" +
-                "id=" + id +
-                ", parentId=" + parentId +
-                ", shortDescription='" + shortDescription + '\'' +
+                "shortDescription='" + shortDescription + '\'' +
                 ", description='" + description + '\'' +
                 ", videoURL='" + videoURL + '\'' +
                 ", thumbnailURL='" + thumbnailURL + '\'' +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(shortDescription);
+        parcel.writeString(description);
+        parcel.writeString(videoURL);
+        parcel.writeString(thumbnailURL);
+    }
+
+    private boolean thumbnailFormatValid(String thumbnailURL){
+        return !thumbnailURL.endsWith(".mp4");
+    }
+
+    private String getThumbnailVideo(){
+        return !thumbnailFormatValid(thumbnailURL) ? thumbnailURL : null;
     }
 }

@@ -1,70 +1,78 @@
 package com.example.user.bakingapp.model;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
-import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-@Entity(tableName = "ingredient",
-        foreignKeys = {@ForeignKey(
-                entity = Recipe.class,
-                parentColumns = "id",
-                childColumns = "parent_id")})
-public class Ingredient {
+import java.util.Locale;
 
-    @PrimaryKey(autoGenerate = true)
-    long id;
-    @ColumnInfo(name = "parent_id")
-    long parentId;
+public class Ingredient implements Parcelable {
+
+    private static final String MEASURE_UNIT = "UNIT";
+
     private float quantity;
     private String measure;
     private String ingredient;
 
-    public Ingredient(long id, long parentId, float quantity, String measure, String ingredient) {
-        this.id = id;
-        this.parentId = parentId;
-        this.quantity = quantity;
-        this.measure = measure;
-        this.ingredient = ingredient;
+    protected Ingredient(Parcel in) {
+        quantity = in.readFloat();
+        measure = in.readString();
+        ingredient = in.readString();
     }
 
-    @Ignore
-    public Ingredient(long parentId, float quantity, String measure, String ingredient) {
-        this.parentId = parentId;
-        this.quantity = quantity;
-        this.measure = measure;
-        this.ingredient = ingredient;
+    public static final Creator<Ingredient> CREATOR = new Creator<Ingredient>() {
+        @Override
+        public Ingredient createFromParcel(Parcel in) {
+            return new Ingredient(in);
+        }
+
+        @Override
+        public Ingredient[] newArray(int size) {
+            return new Ingredient[size];
+        }
+    };
+
+    public String getQuantity() {
+        return String.format(Locale.getDefault(), "%.0f", quantity);
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public long getParentId() {
-        return parentId;
-    }
-
-    public float getQuantity() {
-        return quantity;
-    }
-
-    public String getMeasure() {
-        return measure;
+    public String getMeasureUnit() {
+        if(measure.contentEquals(MEASURE_UNIT)) return "";
+        return measure.toLowerCase();
     }
 
     public String getIngredient() {
-        return ingredient;
+        return ingredient.substring(0,1).toUpperCase() + ingredient.substring(1);
+    }
+
+    public String getQuantityWithMeasure(){
+        String formattedQuantityWithMeasure = getQuantity();
+        String measure = getMeasureUnit();
+
+        if (!measure.isEmpty()){
+            return formattedQuantityWithMeasure + " " + measure;
+        }
+
+        return formattedQuantityWithMeasure;
     }
 
     @Override
     public String toString() {
         return "Ingredient{" +
-                "id=" + id +
-                ", parentId=" + parentId +
-                ", quantity=" + quantity +
+                "quantity=" + quantity +
                 ", measure='" + measure + '\'' +
                 ", ingredient='" + ingredient + '\'' +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeFloat(quantity);
+        parcel.writeString(measure);
+        parcel.writeString(ingredient);
     }
 }
