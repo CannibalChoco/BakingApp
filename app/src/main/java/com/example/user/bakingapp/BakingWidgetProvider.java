@@ -41,6 +41,8 @@ public class BakingWidgetProvider extends AppWidgetProvider {
 
         // set click pending intent for recipe name
         views.setOnClickPendingIntent(R.id.widget_recipe_name, backStackPendingIntent);
+        // Set list item click to launch recipe
+        views.setPendingIntentTemplate(R.id.widget_list_view, backStackPendingIntent);
 
         // Set the ListWidgetService to act as the adapter for the ListView
         Intent widgetServiceIntent = new Intent(context, ListWidgetService.class);
