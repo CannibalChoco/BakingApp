@@ -175,7 +175,11 @@ public class DetailFragment extends Fragment {
             stepId = args.getInt(BakingAppConstants.KEY_STEP_ID);
             int stepCount = args.getInt(BakingAppConstants.KEY_STEP_COUNT);
 
+            String currentStepText = stepId + "/" + (stepCount - 1);
+            currentStepTextView.setText(currentStepText);
+
             if (stepId == 0) {
+                currentStepTextView.setVisibility(View.GONE);
                 prevStepImageView.setVisibility(View.GONE);
                 prevStepTextView.setVisibility(View.GONE);
             } else if (stepId > 0 && stepId == stepCount - 1) {

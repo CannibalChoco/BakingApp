@@ -17,10 +17,9 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
         android:textSize="26sp"
         tools:text="Recipe name"
-        android:background="@drawable/gradient_background_widget"/>
+        android:background="@drawable/background_widget_title"/>
 
     <ListView
-        android:paddingTop="@dimen/small_margin"
         android:id="@+id/widget_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

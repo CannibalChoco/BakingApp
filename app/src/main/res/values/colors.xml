@@ -1,8 +1,9 @@
 <!--?xml version="1.0" encoding="UTF-8"?-->
 <resources>
-    <color name="colorPrimary">#e91e63</color>
-    <color name="colorPrimaryLight">#ff6090</color>
-    <color name="colorPrimaryDark">#b0003a</color>
+
+    <color name="colorPrimary">#870d4e</color>
+    <color name="colorPrimaryLight">#bb467a</color>
+    <color name="colorPrimaryDark">#550026</color>
 
     <color name="colorAccent">@color/colorSecondaryLight</color>
 
@@ -16,12 +17,13 @@
     <color name="colorTextSecondary">#ffffff</color>
     <color name="colorTextPrimaryLight">#424242</color>
 
-    <!-- Transparent colors -->
-    <color name="colorPrimaryLightTransparent_50">#80ff6090</color>
-    <color name="colorPrimaryDarkTransparent_50">#80b0003a</color>
+     <!--Transparent colors for gradient backgrounds-->
+    <color name="colorLightPinkTransparent_50">#80ff6090</color>
+    <color name="colorDarkPinkTransparent_50">#80b0003a</color>
 
-    <color name="colorSecondaryLightTransparent_50">#80ff5131</color>
-    <color name="colorSecondaryDarkTransparent_50">#809c0000</color>
+    <color name="colorLightRedTransparent_50">#80ff5131</color>
+    <color name="colorDarkRedTransparent_50">#809c0000</color>
 
+    <color name="colorPrimaryDarkTransparent_50">#80550026</color>
 
 </resources>
