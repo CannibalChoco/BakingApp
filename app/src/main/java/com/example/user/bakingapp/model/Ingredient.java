@@ -7,6 +7,8 @@ import java.util.Locale;
 
 public class Ingredient implements Parcelable {
 
+    private static final String MEASURE_UNIT = "UNIT";
+
     private float quantity;
     private String measure;
     private String ingredient;
@@ -33,12 +35,24 @@ public class Ingredient implements Parcelable {
         return String.format(Locale.getDefault(), "%.0f", quantity);
     }
 
-    public String getMeasure() {
+    public String getMeasureUnit() {
+        if(measure.contentEquals(MEASURE_UNIT)) return "";
         return measure.toLowerCase();
     }
 
     public String getIngredient() {
-        return ingredient;
+        return ingredient.substring(0,1).toUpperCase() + ingredient.substring(1);
+    }
+
+    public String getQuantityWithMeasure(){
+        String formattedQuantityWithMeasure = getQuantity();
+        String measure = getMeasureUnit();
+
+        if (!measure.isEmpty()){
+            return formattedQuantityWithMeasure + " " + measure;
+        }
+
+        return formattedQuantityWithMeasure;
     }
 
     @Override
@@ -48,11 +62,6 @@ public class Ingredient implements Parcelable {
                 ", measure='" + measure + '\'' +
                 ", ingredient='" + ingredient + '\'' +
                 '}';
-    }
-
-    public String getIngredientFormatted(){
-        return quantity + " " + measure.toLowerCase() +
-                " " + ingredient;
     }
 
     @Override

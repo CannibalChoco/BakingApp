@@ -54,7 +54,9 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         Ingredient ingredient = ingredients.get(position);
 
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.list_item_widget);
-        remoteViews.setTextViewText(R.id.list_item_text_view, ingredient.getIngredientFormatted());
+        remoteViews.setTextViewText(R.id.widget_list_item_ingredient, ingredient.getIngredient());
+        remoteViews.setTextViewText(R.id.widget_list_item_quantity_with_measure,
+                ingredient.getQuantityWithMeasure());
 
         return remoteViews;
     }
