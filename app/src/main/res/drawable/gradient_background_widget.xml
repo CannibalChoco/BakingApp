@@ -3,7 +3,7 @@
     android:shape="rectangle">
 
     <corners
-        android:radius="10dp" />
+        android:radius="@dimen/widget_background_corner_radius" />
 
     <gradient
         android:startColor="@color/colorPrimaryDarkTransparent_50"
