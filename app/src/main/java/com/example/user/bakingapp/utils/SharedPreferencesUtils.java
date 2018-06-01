@@ -40,7 +40,12 @@ public class SharedPreferencesUtils {
     }
 
     public static String getRecipeNameFromPreferences(Context context){
-        return getRecipeFromPreferences(context).getName();
+        Recipe recipe = getRecipeFromPreferences(context);
+        if (recipe == null){
+            return "";
+        }
+
+        return recipe.getName();
     }
 
 }
