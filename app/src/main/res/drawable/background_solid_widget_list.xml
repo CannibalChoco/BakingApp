@@ -4,7 +4,7 @@
     >
 
     <corners
-        android:radius="@dimen/widget_background_corner_radius"
+        android:radius="@dimen/app_corner_radius"
         />
 
     <solid

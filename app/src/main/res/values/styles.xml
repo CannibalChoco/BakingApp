@@ -17,10 +17,43 @@
         <item name="android:layout_marginTop">@dimen/small_margin</item>
     </style>
 
-    <style name="IngredientsListItem">
-        <item name="android:textSize">16sp</item>
+    <style name="DetailFragmentIngredientStyle">
+        <item name="android:textSize">@dimen/detail_ingredient_list_text_size</item>
+        <item name="android:textColor">@color/colorTextPrimaryLight</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginBottom">@dimen/small_margin</item>
+        <item name="android:layout_marginTop">@dimen/small_margin</item>
+    </style>
+
+    <style name="MasterListItemNumberStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/standard_margin</item>
+        <item name="android:layout_marginBottom">@dimen/standard_margin</item>
+        <item name="android:layout_marginStart">@dimen/standard_margin</item>
+        <item name="android:textSize">@dimen/master_list_text_size</item>
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="MasterListItemStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/small_margin</item>
+        <item name="android:layout_marginEnd">@dimen/standard_margin</item>
+        <item name="android:textSize">@dimen/master_list_text_size</item>
+        <item name="android:textColor">@color/colorTextPrimaryLight</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="MasterListIngredientStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/standard_margin</item>
+        <item name="android:layout_marginTop">@dimen/standard_margin</item>
+        <item name="android:layout_marginBottom">@dimen/standard_margin</item>
+        <item name="android:textSize">@dimen/master_list_text_size</item>
+        <item name="android:textColor">@color/colorTextPrimaryLight</item>
     </style>
 
 </resources>

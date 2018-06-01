@@ -4,6 +4,6 @@
     <item
         android:title="@string/action_pin_to_widget"
         android:id="@+id/action_pin_to_widget"
-        android:icon="@drawable/ic_action_show_in_widget"
+        android:icon="@drawable/ic_action_show_in_widget_default"
         app:showAsAction="always" />
 </menu>

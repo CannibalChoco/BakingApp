@@ -22,13 +22,8 @@
     <color name="colorWidgetBackground">@color/colorPrimary</color>
     <color name="colorWidgetListBackground">@color/colorWhite</color>
 
-     <!--Transparent colors for gradient backgrounds-->
-    <color name="colorLightPinkTransparent_50">#80ff6090</color>
-    <color name="colorDarkPinkTransparent_50">#80b0003a</color>
-
-    <color name="colorLightRedTransparent_50">#80ff5131</color>
-    <color name="colorDarkRedTransparent_50">#809c0000</color>
-
-    <color name="colorPrimaryDarkTransparent_75">#bf550026</color>
+    <!-- Colors for pin to widget icon -->
+    <color name="colorPinToWidgetDefault">#F3E5F5</color>
+    <color name="colorPinnedToWidget">#FFC107</color>
 
 </resources>

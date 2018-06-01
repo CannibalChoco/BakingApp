@@ -18,18 +18,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:resize_mode="fixed_width"/>
+            app:resize_mode="fixed_width" />
 
         <ImageView
             android:id="@+id/thumbnail_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scaleType="centerCrop"
             android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 
@@ -38,10 +37,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/standard_margin"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textSize="@dimen/detail_step_text_size"
+        android:textColor="@color/colorTextPrimaryLight"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/media_container"
-        tools:text="add all ingredients together, mix a lot. Sir mixalot. Then bake for some time." />
+        tools:text="Add all ingredients together, mix a lot. Sir mixalot. Then bake for some time." />
 
 </android.support.constraint.ConstraintLayout>

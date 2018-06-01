@@ -13,7 +13,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -82,6 +81,8 @@ public class DetailFragment extends Fragment {
 
     @BindView(R.id.nav_current_step)
     TextView currentStepTextView;
+    @BindView(R.id.nav_total_steps)
+    TextView totalStepsTextView;
     @BindView(R.id.nav_icon_next_step)
     ImageView nextStepImageView;
     @BindView(R.id.nav_icon_prev_step)
@@ -158,7 +159,6 @@ public class DetailFragment extends Fragment {
                 stepDescription.setText(step.getDescription());
 
                 videoUrl = step.getVideoURL();
-                boolean hasVideo = false;
 
                 if (videoUrl == null || videoUrl.isEmpty()) {
                     playerView.setVisibility(View.GONE);
@@ -175,11 +175,13 @@ public class DetailFragment extends Fragment {
             stepId = args.getInt(BakingAppConstants.KEY_STEP_ID);
             int stepCount = args.getInt(BakingAppConstants.KEY_STEP_COUNT);
 
-            String currentStepText = stepId + "/" + (stepCount - 1);
-            currentStepTextView.setText(currentStepText);
+            currentStepTextView.setText(String.valueOf(stepId));
+            totalStepsTextView.setText("/" + (stepCount - 1));
+
 
             if (stepId == 0) {
                 currentStepTextView.setVisibility(View.GONE);
+                totalStepsTextView.setVisibility(View.GONE);
                 prevStepImageView.setVisibility(View.GONE);
                 prevStepTextView.setVisibility(View.GONE);
             } else if (stepId > 0 && stepId == stepCount - 1) {

@@ -97,6 +97,14 @@ public class DetailActivity extends AppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
+
+        String nameInPrefs = SharedPreferencesUtils.getRecipeNameFromPreferences(this);
+        boolean isPinnedToWidget = nameInPrefs.contentEquals(recipe.getName());
+        if(isPinnedToWidget){
+            MenuItem pinToWidget = menu.getItem(0);
+            pinToWidget.setIcon(R.drawable.ic_action_show_in_widget_enabled);
+        }
+
         return true;
     }
 
@@ -111,6 +119,8 @@ public class DetailActivity extends AppCompatActivity implements
             case R.id.action_pin_to_widget:
                 SharedPreferencesUtils.saveRecipeInPreferences(this, recipe);
                 updateWidget();
+                item.setIcon(R.drawable.ic_action_show_in_widget_enabled);
+
                 Toast.makeText(this, R.string.msg_pinned_toWidget, Toast.LENGTH_SHORT).show();
 
                 return true;
