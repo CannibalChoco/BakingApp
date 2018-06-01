@@ -5,9 +5,9 @@
 
     <corners
         android:radius="@dimen/widget_background_corner_radius"
-         />
+        />
 
     <solid
-        android:color="@color/colorWidgetBackground"/>
+        android:color="@color/colorWidgetListBackground"/>
 
 </shape>

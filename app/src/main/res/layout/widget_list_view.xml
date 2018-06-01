@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/gradient_background_widget">
+    android:background="@drawable/background_widget_title">
 
     <TextView
         android:id="@+id/widget_recipe_name"
@@ -16,8 +16,7 @@
         android:textColor="@color/colorTextSecondary"
         android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
         android:textSize="26sp"
-        tools:text="Recipe name"
-        android:background="@drawable/background_widget_title"/>
+        tools:text="Recipe name"/>
 
     <ListView
         android:id="@+id/widget_list_view"
@@ -25,6 +24,8 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:divider="@null"
-        android:paddingBottom="@dimen/small_margin"/>
+        android:paddingBottom="@dimen/small_margin"
+        android:paddingTop="@dimen/small_margin"
+        android:background="@drawable/background_solid_widget_list"/>
 
 </LinearLayout>
