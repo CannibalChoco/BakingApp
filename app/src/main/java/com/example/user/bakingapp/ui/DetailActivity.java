@@ -1,7 +1,5 @@
 package com.example.user.bakingapp.ui;
 
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,21 +7,21 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.example.user.bakingapp.BakingWidgetProvider;
 import com.example.user.bakingapp.R;
 import com.example.user.bakingapp.model.Recipe;
 import com.example.user.bakingapp.utils.BakingAppConstants;
+import com.example.user.bakingapp.utils.OptionsItemUtils;
 import com.example.user.bakingapp.utils.SharedPreferencesUtils;
 
 import java.util.ArrayList;
 
-// TODO: up navigation crashes app
+
 public class DetailActivity extends AppCompatActivity implements
         DetailFragment.OnDetailStepClickListener {
 
     private Recipe recipe;
+    private boolean isPinnedToWidget;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,7 +97,7 @@ public class DetailActivity extends AppCompatActivity implements
         getMenuInflater().inflate(R.menu.menu, menu);
 
         String nameInPrefs = SharedPreferencesUtils.getRecipeNameFromPreferences(this);
-        boolean isPinnedToWidget = nameInPrefs.contentEquals(recipe.getName());
+        isPinnedToWidget = nameInPrefs.contentEquals(recipe.getName());
         if(isPinnedToWidget){
             MenuItem pinToWidget = menu.getItem(0);
             pinToWidget.setIcon(R.drawable.ic_action_show_in_widget_enabled);
@@ -117,30 +115,18 @@ public class DetailActivity extends AppCompatActivity implements
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
             case R.id.action_pin_to_widget:
-                SharedPreferencesUtils.saveRecipeInPreferences(this, recipe);
-                updateWidget();
-                item.setIcon(R.drawable.ic_action_show_in_widget_enabled);
-
-                Toast.makeText(this, R.string.msg_pinned_toWidget, Toast.LENGTH_SHORT).show();
-
+                if (!isPinnedToWidget){
+                    // if not pinned, pin to widget
+                    OptionsItemUtils.pinToWidget(this, getApplication(), item, recipe);
+                } else {
+                    // if pinned, remove from widget
+                    OptionsItemUtils.removeFromWidget(this, getApplication(), item);
+                }
                 return true;
         }
 
         super.onOptionsItemSelected(item);
 
         return false;
-    }
-
-    /**
-     * Get instance of AppWidgetManager and call WidgetProviders updateAppWidgets()
-     * Notify remote adapter to update widget data
-     */
-    private void updateWidget() {
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplication());
-        int[] ids = appWidgetManager
-                .getAppWidgetIds(new ComponentName(getApplication(), BakingWidgetProvider.class));
-
-        BakingWidgetProvider.updateAppWidgets(getApplication(), appWidgetManager, ids);
-        appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.widget_list_view);
     }
 }

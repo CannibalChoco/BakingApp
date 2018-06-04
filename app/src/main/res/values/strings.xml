@@ -9,11 +9,17 @@
 
     <string name="label_prev">Previous</string>
     <string name="label_next">Next</string>
-    <string name="appwidget_text">EXAMPLE</string>
+    <string name="appwidget_text">@string/app_name</string>
     <string name="add_widget">Add widget</string>
 
+    
     <string name="action_pin_to_widget">pin_to_widget</string>
 
-    <string name="msg_pinned_toWidget">Ingredients pinned to widget</string>
+    <!-- Toast messages when user pins or unpins a recipe to/from widget-->
+    <string name="msg_pinned_to_widget">Ingredients pinned to widget</string>
+    <string name="msg_removed_from_widget">Ingredients removed from widget</string>
+
+    <!-- Widget empty state text-->
+    <string name="empty_state_text_widget">No recipe selected. Select a recipe and pin it to widget</string>
 
 </resources>

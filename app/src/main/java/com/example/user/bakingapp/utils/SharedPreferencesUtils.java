@@ -36,6 +36,11 @@ public class SharedPreferencesUtils {
     }
 
     public static List<Ingredient> getIngredientListFromPreferences(Context context){
+        Recipe recipe = getRecipeFromPreferences(context);
+        if (recipe == null){
+            return null;
+        }
+
         return getRecipeFromPreferences(context).getIngredients();
     }
 
@@ -46,6 +51,15 @@ public class SharedPreferencesUtils {
         }
 
         return recipe.getName();
+    }
+
+    public static void removeFromPreferences(Context context){
+        SharedPreferences preferences = context.getSharedPreferences(
+                BAKING_SHARED_PREFERENCES, 0);
+
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.apply();
     }
 
 }

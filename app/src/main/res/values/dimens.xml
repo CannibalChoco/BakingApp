@@ -17,7 +17,7 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="widget_margin">8dp</dimen>
 
     <!-- App view corner radius -->
-    <dimen name="app_corner_radius">20dp</dimen>
+    <dimen name="app_corner_radius">10dp</dimen>
 
     <!-- Detail fragment dimensions -->
     <dimen name="detail_ingredient_list_text_size">16sp</dimen>
@@ -25,5 +25,8 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="master_list_text_size">18sp</dimen>
 
     <dimen name="detail_step_text_size">18sp</dimen>
+
+    <!-- margin for widgets empty state text -->
+    <dimen name="widget_empty_state_text_margin">24dp</dimen>
 
 </resources>

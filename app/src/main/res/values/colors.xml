@@ -21,6 +21,7 @@
 
     <color name="colorWidgetBackground">@color/colorPrimary</color>
     <color name="colorWidgetListBackground">@color/colorWhite</color>
+    <color name="colorWidgetEmptyStateText">#cfd8dc</color>
 
     <!-- Colors for pin to widget icon -->
     <color name="colorPinToWidgetDefault">#F3E5F5</color>
