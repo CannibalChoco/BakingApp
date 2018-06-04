@@ -19,10 +19,19 @@ import butterknife.ButterKnife;
 
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.ViewHolder>{
 
-    private List<Ingredient> ingredients;
+    public interface OnCheckedStateListener{
+        void onCheckBoxStateChanged(int position, boolean isChecked);
+    }
 
-    public IngredientAdapter(List<Ingredient> ingredients){
+    private OnCheckedStateListener checkedStateListener;
+    private List<Ingredient> ingredients;
+    private boolean[] isCheckedArray;
+
+    public IngredientAdapter(List<Ingredient> ingredients, OnCheckedStateListener listener,
+                             boolean[] isCheckedArray){
         this.ingredients = ingredients;
+        this.checkedStateListener = listener;
+        this.isCheckedArray = isCheckedArray;
     }
 
     @NonNull
@@ -31,7 +40,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_item_ingredient, parent, false);
 
-        return new ViewHolder(view);
+        return new ViewHolder(view, checkedStateListener);
     }
 
     @Override
@@ -39,6 +48,10 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
         Ingredient ingredient = ingredients.get(position);
 
         holder.checkBox.setText(ingredient.getIngredient());
+        if (isCheckedArray != null){
+            holder.checkBox.setChecked(isCheckedArray[position]);
+        }
+
         holder.quantityWithMeasure.setText(ingredient.getQuantityWithMeasure());
     }
 
@@ -47,15 +60,26 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
         return ingredients != null ? ingredients.size() : 0;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        @BindView(R.id.quantity_with_measure) TextView quantityWithMeasure;
+        @BindView(R.id.quantity_with_measure)
+        TextView quantityWithMeasure;
         @BindView(R.id.checkBox)
         CheckBox checkBox;
 
-        ViewHolder(View itemView) {
+        private OnCheckedStateListener listener;
+
+        ViewHolder(View itemView, OnCheckedStateListener listener) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            this.listener = listener;
+            checkBox.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            listener.onCheckBoxStateChanged(getAdapterPosition(), checkBox.isChecked());
         }
     }
 }

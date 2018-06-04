@@ -5,7 +5,10 @@
     <color name="colorPrimaryLight">#913763</color>
     <color name="colorPrimaryDark">#340013</color>
 
+    <!-- default accent color -->
     <color name="colorAccent">@color/colorSecondaryLight</color>
+    <!-- color for action_pin_to_widget -->
+    <color name="colorAccentAlt">#ff1744</color>
 
     <color name="colorSecondary">#d60000</color>
     <color name="colorSecondaryLight">#ff5131</color>

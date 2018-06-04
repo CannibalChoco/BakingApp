@@ -33,9 +33,9 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="ic_action_show_in_widget_default" />
+                                      <entry key="outputName" value="ic_action_show_in_widget_accent_alt" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="ffffff" />
+                                      <entry key="themeColor" value="ff1744" />
                                     </map>
                                   </option>
                                 </PersistentState>

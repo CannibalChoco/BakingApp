@@ -43,12 +43,15 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 @SuppressWarnings("WeakerAccess")
-public class DetailFragment extends Fragment {
+public class DetailFragment extends Fragment implements IngredientAdapter.OnCheckedStateListener{
 
     public static final String TAG = DetailFragment.class.getSimpleName();
     private static final String KEY_PLAYER_POSITION = "player_position";
     private static final String KEY_PLAY_WHEN_READY = "play_when_ready";
     private static final String KEY_CURRENT_WINDOW = "current_window";
+    private static final String KEY_IS_CHECKED_ARRAY = "is_checked_array";
+
+    private boolean[] isCheckedArray;
 
     public DetailFragment() {
     }
@@ -67,6 +70,8 @@ public class DetailFragment extends Fragment {
     private long playerPosition;
     private boolean playWhenReady;
     private int currentWindow;
+
+    private IngredientAdapter ingredientAdapter;
 
     @BindView(R.id.ingredients_recycler_view)
     RecyclerView recyclerViewIngredients;
@@ -97,7 +102,6 @@ public class DetailFragment extends Fragment {
     @BindView(R.id.thumbnail_view)
     ImageView thumbnailView;
 
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -115,7 +119,7 @@ public class DetailFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         ButterKnife.bind(this, rootView);
-        
+
         if (savedInstanceState != null) {
 
             if (savedInstanceState.containsKey(KEY_PLAYER_POSITION)) {
@@ -135,6 +139,10 @@ public class DetailFragment extends Fragment {
             } else {
                 currentWindow = 0;
             }
+
+            if (savedInstanceState.containsKey(KEY_IS_CHECKED_ARRAY)){
+                isCheckedArray = savedInstanceState.getBooleanArray(KEY_IS_CHECKED_ARRAY);
+            }
         } else {
             playerPosition = C.TIME_UNSET;
             playWhenReady = true;
@@ -146,10 +154,14 @@ public class DetailFragment extends Fragment {
             getActivity().setTitle(args.getString(BakingAppConstants.KEY_RECIPE_NAME));
             // User selected ingredients
             if (args.containsKey(BakingAppConstants.KEY_INGREDIENT_LIST)) {
+
                 stepsView.setVisibility(View.INVISIBLE);
                 // get ingredients from args
                 ingredients = args.getParcelableArrayList(BakingAppConstants.KEY_INGREDIENT_LIST);
                 stUpIngredientsView(args.getInt(BakingAppConstants.KEY_RECIPE_SERVINGS));
+                if (isCheckedArray == null){
+                    isCheckedArray = new boolean[ingredients.size()];
+                }
 
                 // user selected step
             } else if (args.containsKey(BakingAppConstants.KEY_STEP)) {
@@ -252,7 +264,16 @@ public class DetailFragment extends Fragment {
             outState.putBoolean(KEY_PLAY_WHEN_READY, player.getPlayWhenReady());
         }
 
+        if (ingredientsView.getVisibility() == View.VISIBLE){
+            outState.putBooleanArray(KEY_IS_CHECKED_ARRAY, isCheckedArray);
+        }
+
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onCheckBoxStateChanged(int position, boolean isChecked) {
+        isCheckedArray[position] = isChecked;
     }
 
     @SuppressWarnings("SpellCheckingInspection")
@@ -300,7 +321,7 @@ public class DetailFragment extends Fragment {
      * @param servings number of servings
      */
     private void stUpIngredientsView(int servings) {
-        IngredientAdapter ingredientAdapter = new IngredientAdapter(ingredients);
+        ingredientAdapter = new IngredientAdapter(ingredients, this, isCheckedArray);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerViewIngredients.setLayoutManager(layoutManager);
         recyclerViewIngredients.setAdapter(ingredientAdapter);

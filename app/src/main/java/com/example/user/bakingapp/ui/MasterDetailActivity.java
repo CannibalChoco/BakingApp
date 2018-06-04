@@ -199,9 +199,11 @@ public class MasterDetailActivity extends AppCompatActivity implements
                 if (!isPinnedToWidget){
                     // if not pinned, pin to widget
                     OptionsItemUtils.pinToWidget(this, getApplication(), item, recipe);
+                    isPinnedToWidget = true;
                 } else {
                     // if pinned, remove from widget
                     OptionsItemUtils.removeFromWidget(this, getApplication(), item);
+                    isPinnedToWidget = false;
                 }
                 return true;
         }
