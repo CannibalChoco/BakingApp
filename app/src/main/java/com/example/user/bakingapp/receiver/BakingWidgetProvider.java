@@ -107,7 +107,7 @@ public class BakingWidgetProvider extends AppWidgetProvider {
     /**
      * Go through all app widgets and update  the m
      * @param context app context
-     * @param appWidgetManager
+     * @param appWidgetManager AppWidgetManager
      * @param appWidgetIds array oi int ids of all the widgets on home screen
      */
     public static void updateAppWidgets (Context context, AppWidgetManager appWidgetManager,

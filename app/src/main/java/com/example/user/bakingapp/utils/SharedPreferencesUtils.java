@@ -30,9 +30,7 @@ public class SharedPreferencesUtils {
                 BAKING_SHARED_PREFERENCES, 0);
         String json = preferences.getString(BakingAppConstants.KEY_RECIPE, "");
 
-        Recipe recipe = new Gson().fromJson(json, Recipe.class);
-
-        return recipe;
+        return new Gson().fromJson(json, Recipe.class);
     }
 
     public static List<Ingredient> getIngredientListFromPreferences(Context context){

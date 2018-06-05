@@ -18,7 +18,6 @@
 
     <color name="colorPrimaryListItemBackground">@color/colorWhite</color>
 
-    <color name="colorTextPrimary">#000000</color>
     <color name="colorTextSecondary">@color/colorWhite</color>
     <color name="colorTextPrimaryLight">#424242</color>
 
@@ -28,6 +27,5 @@
 
     <!-- Colors for pin to widget icon -->
     <color name="colorPinToWidgetDefault">#F3E5F5</color>
-    <color name="colorPinnedToWidget">#FFC107</color>
 
 </resources>

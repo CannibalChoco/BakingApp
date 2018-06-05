@@ -1,6 +1,7 @@
 package com.example.user.bakingapp.ui;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
@@ -52,7 +53,6 @@ import butterknife.OnClick;
 public class DetailFragment extends Fragment implements IngredientAdapter.OnCheckedStateListener,
         ConnectivityReceiver.ConnectivityReceiverListener {
 
-    public static final String TAG = DetailFragment.class.getSimpleName();
     private static final String KEY_PLAYER_POSITION = "player_position";
     private static final String KEY_PLAY_WHEN_READY = "play_when_ready";
     private static final String KEY_CURRENT_WINDOW = "current_window";
@@ -164,7 +164,11 @@ public class DetailFragment extends Fragment implements IngredientAdapter.OnChec
 
         Bundle args = getArguments();
         if (args != null) {
-            getActivity().setTitle(args.getString(BakingAppConstants.KEY_RECIPE_NAME));
+            Activity activity = getActivity();
+            if (activity != null) {
+                activity.setTitle(args.getString(BakingAppConstants.KEY_RECIPE_NAME));
+            }
+
             // User selected ingredients
             if (args.containsKey(BakingAppConstants.KEY_INGREDIENT_LIST)) {
 
@@ -181,7 +185,10 @@ public class DetailFragment extends Fragment implements IngredientAdapter.OnChec
                 ingredientsView.setVisibility(View.GONE);
 
                 step = args.getParcelable(BakingAppConstants.KEY_STEP);
-                stepDescription.setText(step.getDescription());
+
+                String stepDescriptionString = step.getDescription() != null ? step.getDescription():
+                        getString(R.string.no_step_description);
+                stepDescription.setText(stepDescriptionString);
 
                 videoUrl = step.getVideoURL();
 
@@ -201,7 +208,8 @@ public class DetailFragment extends Fragment implements IngredientAdapter.OnChec
             int stepCount = args.getInt(BakingAppConstants.KEY_STEP_COUNT);
 
             currentStepTextView.setText(String.valueOf(stepId));
-            totalStepsTextView.setText("/" + (stepCount - 1));
+            String totalSteps = "/" + (stepCount - 1);
+            totalStepsTextView.setText(totalSteps);
 
             if (stepId == 0) {
                 hideBottomNavStepsInfoForIngredients();

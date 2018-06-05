@@ -45,11 +45,10 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Vi
         if (position == 0){
             holder.ingredients.setText(R.string.label_ingredients);
         } else {
-            holder.itemNr.setText(String.valueOf(position) + ".");
+            String itemNr = String.valueOf(position) + ".";
+            holder.itemNr.setText(itemNr);
             holder.shortDescription.setText(steps.get(position).getShortDescription());
         }
-
-
     }
 
     @Override

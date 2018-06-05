@@ -33,7 +33,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_action_next" />
+        app:srcCompat="@drawable/ic_action_next"
+        android:contentDescription="@string/accessibility_step_next_button" />
 
     <ImageView
         android:id="@+id/nav_icon_prev_step"
@@ -45,7 +46,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_action_previous" />
+        app:srcCompat="@drawable/ic_action_previous"
+        android:contentDescription="@string/accessibility_step_previous_button" />
 
     <TextView
         android:id="@+id/nav_next_step_text"
