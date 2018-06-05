@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 
 public class DetailActivity extends AppCompatActivity implements
-        DetailFragment.OnDetailStepClickListener {
+        DetailFragment.OnDetailStepClickListener{
 
     private Recipe recipe;
     private boolean isPinnedToWidget;
@@ -129,4 +129,5 @@ public class DetailActivity extends AppCompatActivity implements
 
         return false;
     }
+
 }

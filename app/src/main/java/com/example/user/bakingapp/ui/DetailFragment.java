@@ -2,11 +2,15 @@ package com.example.user.bakingapp.ui;
 
 
 import android.content.Context;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,10 +20,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.user.bakingapp.MyApplication;
 import com.example.user.bakingapp.R;
 import com.example.user.bakingapp.adapter.IngredientAdapter;
 import com.example.user.bakingapp.model.Ingredient;
 import com.example.user.bakingapp.model.Step;
+import com.example.user.bakingapp.receiver.ConnectivityReceiver;
 import com.example.user.bakingapp.utils.BakingAppConstants;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -43,7 +49,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 @SuppressWarnings("WeakerAccess")
-public class DetailFragment extends Fragment implements IngredientAdapter.OnCheckedStateListener{
+public class DetailFragment extends Fragment implements IngredientAdapter.OnCheckedStateListener,
+        ConnectivityReceiver.ConnectivityReceiverListener {
 
     public static final String TAG = DetailFragment.class.getSimpleName();
     private static final String KEY_PLAYER_POSITION = "player_position";
@@ -52,6 +59,10 @@ public class DetailFragment extends Fragment implements IngredientAdapter.OnChec
     private static final String KEY_IS_CHECKED_ARRAY = "is_checked_array";
 
     private boolean[] isCheckedArray;
+    private boolean isWaitingForInternetConnection = false;
+    private boolean hasInitializedVideo = false;
+
+    private ConnectivityReceiver connectivityReceiver;
 
     public DetailFragment() {
     }
@@ -101,6 +112,8 @@ public class DetailFragment extends Fragment implements IngredientAdapter.OnChec
     PlayerView playerView;
     @BindView(R.id.thumbnail_view)
     ImageView thumbnailView;
+    @BindView(R.id.detail_constraint_layout)
+    ConstraintLayout detailConstraintLayout;
 
     @Override
     public void onAttach(Context context) {
@@ -141,7 +154,7 @@ public class DetailFragment extends Fragment implements IngredientAdapter.OnChec
                 currentWindow = 0;
             }
 
-            if (savedInstanceState.containsKey(KEY_IS_CHECKED_ARRAY)){
+            if (savedInstanceState.containsKey(KEY_IS_CHECKED_ARRAY)) {
                 isCheckedArray = savedInstanceState.getBooleanArray(KEY_IS_CHECKED_ARRAY);
             }
         } else {
@@ -160,7 +173,7 @@ public class DetailFragment extends Fragment implements IngredientAdapter.OnChec
                 // get ingredients from args
                 ingredients = args.getParcelableArrayList(BakingAppConstants.KEY_INGREDIENT_LIST);
                 stUpIngredientsView(args.getInt(BakingAppConstants.KEY_RECIPE_SERVINGS));
-                if (isCheckedArray == null){
+                if (isCheckedArray == null) {
                     isCheckedArray = new boolean[ingredients.size()];
                 }
 
@@ -191,15 +204,10 @@ public class DetailFragment extends Fragment implements IngredientAdapter.OnChec
             currentStepTextView.setText(String.valueOf(stepId));
             totalStepsTextView.setText("/" + (stepCount - 1));
 
-
             if (stepId == 0) {
-                currentStepTextView.setVisibility(View.GONE);
-                totalStepsTextView.setVisibility(View.GONE);
-                prevStepImageView.setVisibility(View.GONE);
-                prevStepTextView.setVisibility(View.GONE);
+                hideBottomNavStepsInfoForIngredients();
             } else if (stepId > 0 && stepId == stepCount - 1) {
-                nextStepImageView.setVisibility(View.GONE);
-                nextStepTextView.setVisibility(View.GONE);
+                hideNextInBottomNavForLastStep();
             }
         }
 
@@ -215,8 +223,22 @@ public class DetailFragment extends Fragment implements IngredientAdapter.OnChec
     @Override
     public void onStart() {
         super.onStart();
+
+        // connectivity receiver
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            connectivityReceiver = new ConnectivityReceiver();
+            getActivity().registerReceiver(connectivityReceiver,
+                    new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
+
+        /*
+         * register connection status listener
+         * as shown in the androidhive tutorial disclosed in ConnectivityReceiver.java
+         */
+        MyApplication.getInstance().setConnectivityListener(this);
+
         if (Util.SDK_INT > 23 && videoUrl != null) {
-            initPlayer();
+            initPlayerIfConnected();
         }
     }
 
@@ -224,7 +246,7 @@ public class DetailFragment extends Fragment implements IngredientAdapter.OnChec
     public void onResume() {
         super.onResume();
         if ((Util.SDK_INT <= 23 || player == null) && videoUrl != null) {
-            initPlayer();
+            initPlayerIfConnected();
         }
     }
 
@@ -240,6 +262,11 @@ public class DetailFragment extends Fragment implements IngredientAdapter.OnChec
         if (Util.SDK_INT <= 23) {
             releasePlayer();
         }
+
+        // unregister connectivity receiver
+        if (connectivityReceiver != null) {
+            getActivity().unregisterReceiver(connectivityReceiver);
+        }
     }
 
     @Override
@@ -250,22 +277,15 @@ public class DetailFragment extends Fragment implements IngredientAdapter.OnChec
         }
     }
 
-    private void releasePlayer() {
-        if (player != null) {
-            player.release();
-            player = null;
-        }
-    }
-
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        if (player != null){
+        if (player != null) {
             outState.putLong(KEY_PLAYER_POSITION, player.getCurrentPosition());
             outState.putInt(KEY_CURRENT_WINDOW, player.getCurrentWindowIndex());
             outState.putBoolean(KEY_PLAY_WHEN_READY, player.getPlayWhenReady());
         }
 
-        if (ingredientsView.getVisibility() == View.VISIBLE){
+        if (ingredientsView.getVisibility() == View.VISIBLE) {
             outState.putBooleanArray(KEY_IS_CHECKED_ARRAY, isCheckedArray);
         }
 
@@ -275,6 +295,40 @@ public class DetailFragment extends Fragment implements IngredientAdapter.OnChec
     @Override
     public void onCheckBoxStateChanged(int position, boolean isChecked) {
         isCheckedArray[position] = isChecked;
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        if (isConnected) {
+            if (isWaitingForInternetConnection) {
+                if (!hasInitializedVideo) {
+
+                    // restart play from where it was left
+                    playerPosition = player.getCurrentPosition();
+                    playWhenReady = player.getPlayWhenReady();
+                    currentWindow = player.getCurrentWindowIndex();
+
+                    initPlayer();
+                }
+                isWaitingForInternetConnection = false;
+            }
+        } else {
+            if (!isWaitingForInternetConnection) {
+                showSnackbar(getString(R.string.connectivity_lost_msg));
+                isWaitingForInternetConnection = true;
+            }
+
+        }
+    }
+
+    private void initPlayerIfConnected() {
+        if(ConnectivityReceiver.isConnected()){
+            initPlayer();
+            isWaitingForInternetConnection = false;
+        } else {
+            isWaitingForInternetConnection = true;
+            showSnackbar("Waiting for connection");
+        }
     }
 
     @SuppressWarnings("SpellCheckingInspection")
@@ -301,6 +355,13 @@ public class DetailFragment extends Fragment implements IngredientAdapter.OnChec
 
         player.prepare(videoSource, false, false);
         player.setPlayWhenReady(playWhenReady);
+    }
+
+    private void releasePlayer() {
+        if (player != null) {
+            player.release();
+            player = null;
+        }
     }
 
     @OnClick({R.id.nav_next_step_text, R.id.nav_icon_next_step})
@@ -330,4 +391,28 @@ public class DetailFragment extends Fragment implements IngredientAdapter.OnChec
 
         this.servings.setText(String.valueOf(servings));
     }
+
+    private void showSnackbar(String message) {
+        Snackbar.make(detailConstraintLayout, message, Snackbar.LENGTH_LONG).show();
+    }
+
+    /**
+     * When displaying last step, hide the text and button for going to next step
+     */
+    private void hideNextInBottomNavForLastStep() {
+        nextStepImageView.setVisibility(View.GONE);
+        nextStepTextView.setVisibility(View.GONE);
+    }
+
+    /**
+     * When displaying the list of ingredients, hide previous button and text, current and total
+     * steps text
+     */
+    private void hideBottomNavStepsInfoForIngredients() {
+        currentStepTextView.setVisibility(View.GONE);
+        totalStepsTextView.setVisibility(View.GONE);
+        prevStepImageView.setVisibility(View.GONE);
+        prevStepTextView.setVisibility(View.GONE);
+    }
+
 }

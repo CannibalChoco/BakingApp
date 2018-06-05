@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.Snackbar;
 import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -17,7 +19,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.user.bakingapp.IdlingResource.SimpleIdlingResource;
 import com.example.user.bakingapp.MyApplication;
@@ -43,7 +44,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @SuppressWarnings("WeakerAccess")
 public class RecipeListActivity extends AppCompatActivity implements
         RecipeAdapter.OnRecipeClickListener,
-        ConnectivityReceiver.ConnectivityReceiverListener{
+        ConnectivityReceiver.ConnectivityReceiverListener {
 
     private List<Recipe> recipeList;
 
@@ -53,9 +54,11 @@ public class RecipeListActivity extends AppCompatActivity implements
     TextView recipeEmptyStateText;
     @BindView(R.id.recipe_list_progress_bar)
     ProgressBar recipeListProgressBar;
+    @BindView(R.id.recipe_list_main_layout)
+    ConstraintLayout constraintLayout;
 
     @Nullable
-    private SimpleIdlingResource idlingResource;
+    SimpleIdlingResource idlingResource;
 
     //private ConnectivityReceiver connectivityReceiver;
 
@@ -118,8 +121,8 @@ public class RecipeListActivity extends AppCompatActivity implements
         }
     }
 
-    private void getRecipesIfConnected(){
-        if (ConnectivityReceiver.isConnected()){
+    private void getRecipesIfConnected() {
+        if (ConnectivityReceiver.isConnected()) {
             getRecipes();
         } else {
             hasLoadedRecipes = false;
@@ -202,21 +205,21 @@ public class RecipeListActivity extends AppCompatActivity implements
         startActivity(intent);
     }
 
-    private void showLoading(){
+    private void showLoading() {
         recipeListProgressBar.setVisibility(View.VISIBLE);
 
         recyclerView.setVisibility(View.INVISIBLE);
         recipeEmptyStateText.setVisibility(View.INVISIBLE);
     }
 
-    private void showRecipes(){
+    private void showRecipes() {
         recyclerView.setVisibility(View.VISIBLE);
 
         recipeListProgressBar.setVisibility(View.INVISIBLE);
         recipeEmptyStateText.setVisibility(View.INVISIBLE);
     }
 
-    private void showEmptyStateNoConnection(){
+    private void showEmptyStateNoConnection() {
         recipeEmptyStateText.setVisibility(View.VISIBLE);
         recipeEmptyStateText.setText(R.string.recipe_list_empty_no_connection);
 
@@ -224,7 +227,7 @@ public class RecipeListActivity extends AppCompatActivity implements
         recyclerView.setVisibility(View.INVISIBLE);
     }
 
-    private void showEmptyStateError(){
+    private void showEmptyStateError() {
         recipeEmptyStateText.setVisibility(View.VISIBLE);
         recipeEmptyStateText.setText(R.string.recipe_list_empty_error);
 
@@ -236,17 +239,21 @@ public class RecipeListActivity extends AppCompatActivity implements
     public void onNetworkConnectionChanged(boolean isConnected) {
         if (isConnected) {
             if (isWaitingForInternetConnection) {
-                if (!hasLoadedRecipes){
+                if (!hasLoadedRecipes) {
                     getRecipes();
                 }
                 isWaitingForInternetConnection = false;
             }
         } else {
             if (!isWaitingForInternetConnection) {
-                Toast.makeText(this, R.string.connectivity_lost_msg, Toast.LENGTH_SHORT).show();
+                showSnackbar(getString(R.string.connectivity_lost_msg));
                 isWaitingForInternetConnection = true;
             }
 
         }
+    }
+
+    private void showSnackbar(String message) {
+        Snackbar.make(constraintLayout, message, Snackbar.LENGTH_LONG).show();
     }
 }

@@ -12,6 +12,7 @@ import android.view.MenuItem;
 
 import com.example.user.bakingapp.R;
 import com.example.user.bakingapp.model.Recipe;
+import com.example.user.bakingapp.receiver.ConnectivityReceiver;
 import com.example.user.bakingapp.utils.BakingAppConstants;
 import com.example.user.bakingapp.utils.OptionsItemUtils;
 import com.example.user.bakingapp.utils.SharedPreferencesUtils;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 
 public class MasterDetailActivity extends AppCompatActivity implements
         MasterListFragment.OnMasterListStepClickListener,
-        DetailFragment.OnDetailStepClickListener {
+        DetailFragment.OnDetailStepClickListener{
 
     public static final int GET_RECIPE_FROM_SHARED_PREFS = 9321;
     public static final String KEY_GET_RECIPE_FROM_SHARED_PREFS = "get_recipe_from_shared_prefs";
@@ -29,6 +30,8 @@ public class MasterDetailActivity extends AppCompatActivity implements
     private Recipe recipe;
 
     private boolean isPinnedToWidget;
+
+    private ConnectivityReceiver connectivityReceiver;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,6 +65,7 @@ public class MasterDetailActivity extends AppCompatActivity implements
             isTwoPane = false;
         }
     }
+
 
     /**
      * Creates a new MasterListFragment for MasterDetailActivity, sets arguments, doesn't add
