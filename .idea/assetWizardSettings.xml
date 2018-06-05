@@ -23,7 +23,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/toggle/ic_star_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/image/ic_navigate_before_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -33,9 +33,9 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="outputName" value="ic_action_show_in_widget_accent_alt" />
+                                      <entry key="outputName" value="ic_action_previous" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="ff1744" />
+                                      <entry key="themeColor" value="ff5131" />
                                     </map>
                                   </option>
                                 </PersistentState>

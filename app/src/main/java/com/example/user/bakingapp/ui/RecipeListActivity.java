@@ -40,7 +40,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-// TODO: check network connection before doing network actions
 @SuppressWarnings("WeakerAccess")
 public class RecipeListActivity extends AppCompatActivity implements
         RecipeAdapter.OnRecipeClickListener,
@@ -59,8 +58,6 @@ public class RecipeListActivity extends AppCompatActivity implements
 
     @Nullable
     SimpleIdlingResource idlingResource;
-
-    //private ConnectivityReceiver connectivityReceiver;
 
     private boolean isWaitingForInternetConnection;
     private boolean hasLoadedRecipes = false;

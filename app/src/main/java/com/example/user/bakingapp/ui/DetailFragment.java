@@ -126,7 +126,6 @@ public class DetailFragment extends Fragment implements IngredientAdapter.OnChec
         }
     }
 
-    // TODO: set up connectivity listener, set up with exoplayer
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
