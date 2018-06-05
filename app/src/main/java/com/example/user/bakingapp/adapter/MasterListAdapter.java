@@ -80,6 +80,6 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Vi
         @Override
         public void onClick(View v) {
             listener.onStepSelected(getAdapterPosition());
-        }
+            }
     }
 }

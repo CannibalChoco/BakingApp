@@ -1,22 +1,31 @@
 package com.example.user.bakingapp.ui;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.VisibleForTesting;
 import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.user.bakingapp.IdlingResource.SimpleIdlingResource;
+import com.example.user.bakingapp.MyApplication;
 import com.example.user.bakingapp.R;
 import com.example.user.bakingapp.RecipeClient;
 import com.example.user.bakingapp.adapter.RecipeAdapter;
 import com.example.user.bakingapp.model.Recipe;
+import com.example.user.bakingapp.receiver.ConnectivityReceiver;
 import com.example.user.bakingapp.utils.BakingAppConstants;
 
 import java.util.ArrayList;
@@ -33,15 +42,27 @@ import retrofit2.converter.gson.GsonConverterFactory;
 // TODO: check network connection before doing network actions
 @SuppressWarnings("WeakerAccess")
 public class RecipeListActivity extends AppCompatActivity implements
-        RecipeAdapter.OnRecipeClickListener {
+        RecipeAdapter.OnRecipeClickListener,
+        ConnectivityReceiver.ConnectivityReceiverListener{
 
     private List<Recipe> recipeList;
 
     @BindView(R.id.recipe_list_recycler_view)
     RecyclerView recyclerView;
+    @BindView(R.id.recipe_list_empty_state_text)
+    TextView recipeEmptyStateText;
+    @BindView(R.id.recipe_list_progress_bar)
+    ProgressBar recipeListProgressBar;
 
     @Nullable
     private SimpleIdlingResource idlingResource;
+
+    //private ConnectivityReceiver connectivityReceiver;
+
+    private boolean isWaitingForInternetConnection;
+    private boolean hasLoadedRecipes = false;
+
+    private ConnectivityReceiver connectivityReceiver;
 
     /**
      * Only called from test, creates and returns a new {@link SimpleIdlingResource}.
@@ -63,14 +84,47 @@ public class RecipeListActivity extends AppCompatActivity implements
 
         recipeList = new ArrayList<>();
 
-//        if(savedInstanceState == null){
-//            getRecipes();
-//        }
-
         getIdlingResource();
 
-        getRecipes();
+        getRecipesIfConnected();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // connectivity receiver
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            connectivityReceiver = new ConnectivityReceiver();
+            this.registerReceiver(connectivityReceiver,
+                    new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
+
+        /*
+         * register connection status listener
+         * as shown in the androidhive tutorial disclosed in ConnectivityReceiver.java
+         */
+        MyApplication.getInstance().setConnectivityListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // unregister connectivity receiver
+        if (connectivityReceiver != null) {
+            this.unregisterReceiver(connectivityReceiver);
+        }
+    }
+
+    private void getRecipesIfConnected(){
+        if (ConnectivityReceiver.isConnected()){
+            getRecipes();
+        } else {
+            hasLoadedRecipes = false;
+            showEmptyStateNoConnection();
+        }
     }
 
     /**
@@ -80,6 +134,8 @@ public class RecipeListActivity extends AppCompatActivity implements
         if (idlingResource != null) {
             idlingResource.setIdleState(false);
         }
+
+        showLoading();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(RecipeClient.RECIPE_URL)
@@ -96,20 +152,28 @@ public class RecipeListActivity extends AppCompatActivity implements
                 recipeList = response.body();
                 setUpUi();
 
+                hasLoadedRecipes = true;
+
                 if (idlingResource != null) {
                     idlingResource.setIdleState(true);
                 }
+
+                showRecipes();
             }
 
             @Override
             public void onFailure(Call<List<Recipe>> call, Throwable t) {
+                hasLoadedRecipes = false;
+                showEmptyStateError();
+                recipeEmptyStateText.setText(R.string.recipe_list_empty_error);
             }
         });
     }
 
+
     private void setUpUi() {
         Configuration config = getResources().getConfiguration();
-        if (config.smallestScreenWidthDp >= 600){
+        if (config.smallestScreenWidthDp >= 600) {
             GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
             recyclerView.setLayoutManager(layoutManager);
         } else {
@@ -138,4 +202,51 @@ public class RecipeListActivity extends AppCompatActivity implements
         startActivity(intent);
     }
 
+    private void showLoading(){
+        recipeListProgressBar.setVisibility(View.VISIBLE);
+
+        recyclerView.setVisibility(View.INVISIBLE);
+        recipeEmptyStateText.setVisibility(View.INVISIBLE);
+    }
+
+    private void showRecipes(){
+        recyclerView.setVisibility(View.VISIBLE);
+
+        recipeListProgressBar.setVisibility(View.INVISIBLE);
+        recipeEmptyStateText.setVisibility(View.INVISIBLE);
+    }
+
+    private void showEmptyStateNoConnection(){
+        recipeEmptyStateText.setVisibility(View.VISIBLE);
+        recipeEmptyStateText.setText(R.string.recipe_list_empty_no_connection);
+
+        recipeListProgressBar.setVisibility(View.INVISIBLE);
+        recyclerView.setVisibility(View.INVISIBLE);
+    }
+
+    private void showEmptyStateError(){
+        recipeEmptyStateText.setVisibility(View.VISIBLE);
+        recipeEmptyStateText.setText(R.string.recipe_list_empty_error);
+
+        recipeListProgressBar.setVisibility(View.INVISIBLE);
+        recyclerView.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        if (isConnected) {
+            if (isWaitingForInternetConnection) {
+                if (!hasLoadedRecipes){
+                    getRecipes();
+                }
+                isWaitingForInternetConnection = false;
+            }
+        } else {
+            if (!isWaitingForInternetConnection) {
+                Toast.makeText(this, R.string.connectivity_lost_msg, Toast.LENGTH_SHORT).show();
+                isWaitingForInternetConnection = true;
+            }
+
+        }
+    }
 }

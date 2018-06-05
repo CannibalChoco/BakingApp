@@ -1,4 +1,4 @@
-package com.example.user.bakingapp;
+package com.example.user.bakingapp.receiver;
 
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import com.example.user.bakingapp.R;
 import com.example.user.bakingapp.service.ListWidgetService;
 import com.example.user.bakingapp.ui.MasterDetailActivity;
 import com.example.user.bakingapp.ui.RecipeListActivity;

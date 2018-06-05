@@ -22,4 +22,12 @@
     <!-- Widget empty state text-->
     <string name="empty_state_text_widget">No recipe selected. Select a recipe and pin it to widget</string>
 
+    <!-- - - - - - - - - - - - - - - - - - - - - - - -
+      - Used to notify user of network state changes  -
+      - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- Notify user when connection is lost -->
+    <string name="connectivity_lost_msg">Connection to the internet lost</string>
+    <string name="recipe_list_empty_no_connection">Can\'t get recipes offline</string>
+    <string name="recipe_list_empty_error">Something went wrong. Try again later</string>
+
 </resources>

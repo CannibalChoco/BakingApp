@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -28,7 +29,7 @@
             android:name=".ui.DetailActivity"
             android:parentActivityName=".ui.MasterDetailActivity" />
 
-        <receiver android:name=".BakingWidgetProvider">
+        <receiver android:name=".receiver.BakingWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -36,6 +37,12 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/baking_widget_provider_info" />
+        </receiver>
+        <receiver android:name=".receiver.ConnectivityReceiver"
+            android:enabled="true">
+        <intent-filter>
+            <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+        </intent-filter>
         </receiver>
         <service android:name=".service.ListWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS"/>

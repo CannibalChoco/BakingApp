@@ -101,7 +101,7 @@ public class MasterDetailActivity extends AppCompatActivity implements
         if (isTwoPane) {
             getSupportFragmentManager().popBackStack();
             replaceDetailFragment(position);
-        }
+            }
     }
 
     /**
