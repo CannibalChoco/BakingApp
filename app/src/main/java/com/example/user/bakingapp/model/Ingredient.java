@@ -8,6 +8,7 @@ import java.util.Locale;
 public class Ingredient implements Parcelable {
 
     private static final String MEASURE_UNIT = "UNIT";
+    private static final String MEASURE_CUP = "CUP";
 
     private float quantity;
     private String measure;
@@ -37,6 +38,9 @@ public class Ingredient implements Parcelable {
 
     public String getMeasureUnit() {
         if(measure.contentEquals(MEASURE_UNIT)) return "";
+        else if (measure.contentEquals(MEASURE_CUP) && quantity > 1)
+            return measure.toLowerCase() + "s";
+
         return measure.toLowerCase();
     }
 

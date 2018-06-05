@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -114,6 +113,8 @@ public class DetailFragment extends Fragment implements IngredientAdapter.OnChec
     ImageView thumbnailView;
     @BindView(R.id.detail_constraint_layout)
     ConstraintLayout detailConstraintLayout;
+    @BindView(R.id.player_empty_state_text)
+    TextView playerEmptyStateText;
 
     @Override
     public void onAttach(Context context) {
@@ -194,6 +195,7 @@ public class DetailFragment extends Fragment implements IngredientAdapter.OnChec
 
                 if (videoUrl == null || videoUrl.isEmpty()) {
                     playerView.setVisibility(View.GONE);
+                    playerEmptyStateText.setVisibility(View.GONE);
 
                     String thumbnailUrl = step.getThumbnailURL();
                     if (thumbnailUrl != null && !thumbnailUrl.isEmpty()) {
@@ -308,38 +310,55 @@ public class DetailFragment extends Fragment implements IngredientAdapter.OnChec
     public void onNetworkConnectionChanged(boolean isConnected) {
         if (isConnected) {
             if (isWaitingForInternetConnection) {
-                if (!hasInitializedVideo) {
-
+                // get back connection
+                if (hasInitializedVideo) {
+                    if (playerEmptyStateText.getVisibility() == View.VISIBLE){
+                        playerEmptyStateText.setVisibility(View.GONE);
+                    }
                     // restart play from where it was left
                     playerPosition = player.getCurrentPosition();
                     playWhenReady = player.getPlayWhenReady();
                     currentWindow = player.getCurrentWindowIndex();
 
                     initPlayer();
+                } else {
+                    // play from start
+                    initPlayer();
                 }
                 isWaitingForInternetConnection = false;
             }
         } else {
+            // no connection
+            playerEmptyStateText.setVisibility(View.VISIBLE);
+
             if (!isWaitingForInternetConnection) {
-                showSnackbar(getString(R.string.connectivity_lost_msg));
                 isWaitingForInternetConnection = true;
             }
 
         }
     }
 
+    /**
+     * Call initPlayer if connected to network, otherwise show message
+     */
     private void initPlayerIfConnected() {
         if(ConnectivityReceiver.isConnected()){
             initPlayer();
             isWaitingForInternetConnection = false;
         } else {
             isWaitingForInternetConnection = true;
-            showSnackbar("Waiting for connection");
+            playerEmptyStateText.setVisibility(View.VISIBLE);
+            playerEmptyStateText.setText(R.string.waiting_for_connectivity_msg);
         }
     }
 
+    /**
+     * Initialize ExopPlayer for playback
+     */
     @SuppressWarnings("SpellCheckingInspection")
     private void initPlayer() {
+        playerEmptyStateText.setVisibility(View.GONE);
+
         player = ExoPlayerFactory.newSimpleInstance(
                 new DefaultRenderersFactory(getContext()),
                 new DefaultTrackSelector(),
@@ -362,6 +381,8 @@ public class DetailFragment extends Fragment implements IngredientAdapter.OnChec
 
         player.prepare(videoSource, false, false);
         player.setPlayWhenReady(playWhenReady);
+
+        hasInitializedVideo = true;
     }
 
     private void releasePlayer() {
@@ -385,7 +406,7 @@ public class DetailFragment extends Fragment implements IngredientAdapter.OnChec
 
 
     /**
-     * Set up everything needed for the Ingredient view
+     * Set up the Ingredient RecyclerView
      *
      * @param servings number of servings
      */
@@ -397,10 +418,6 @@ public class DetailFragment extends Fragment implements IngredientAdapter.OnChec
         recyclerViewIngredients.setHasFixedSize(true);
 
         this.servings.setText(String.valueOf(servings));
-    }
-
-    private void showSnackbar(String message) {
-        Snackbar.make(detailConstraintLayout, message, Snackbar.LENGTH_LONG).show();
     }
 
     /**

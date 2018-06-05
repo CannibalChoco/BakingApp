@@ -10,6 +10,8 @@
 
     <dimen name="exoplayer_min_height">200dp</dimen>
 
+    <dimen name="widget_recipe_name_text_size">26sp</dimen>
+
     <!-- App view corner radius -->
     <dimen name="app_corner_radius">10dp</dimen>
 

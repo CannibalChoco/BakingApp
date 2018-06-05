@@ -65,21 +65,6 @@ public class MasterDetailActivity extends AppCompatActivity implements
         }
     }
 
-
-    /**
-     * Creates a new MasterListFragment for MasterDetailActivity, sets arguments, doesn't add
-     * fragment to back stack
-     * @param bundle arguments that are passed to fragment
-     */
-    private void addMasterListFragment(Bundle bundle) {
-        MasterListFragment masterListFragment = new MasterListFragment();
-        masterListFragment.setArguments(bundle);
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.master_list_container, masterListFragment)
-                .commit();
-    }
-
     /**
      * Callback triggered from MasterListFragment when list item is clicked
      *
@@ -105,74 +90,6 @@ public class MasterDetailActivity extends AppCompatActivity implements
             getSupportFragmentManager().popBackStack();
             replaceDetailFragment(position);
             }
-    }
-
-    /**
-     * Adds a nes DetailFragment in master-detail view if the app is in two pane mode
-     */
-    private void addDetailFragment() {
-        DetailFragment detailFragment = new DetailFragment();
-        detailFragment.setArguments(getArgsForDetailFragment
-                (BakingAppConstants.DEFAULT_FRAGMENT_DETAIL_ITEM));
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.detail_container, detailFragment)
-                .addToBackStack(null)
-                .commit();
-    }
-
-    /**
-     * Replaces the existing DetailFragment with a new one. Triggered when step is selected in
-     * master list or in DetailFragment navigation
-     * @param position position of the next item to display in fragment
-     */
-    private void replaceDetailFragment(int position) {
-        DetailFragment detailFragment = new DetailFragment();
-        detailFragment.setArguments(getArgsForDetailFragment(position));
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.detail_container, detailFragment)
-                .addToBackStack(null)
-                .commit();
-    }
-
-    private void startDetailActivity(int position) {
-        Intent intent = new Intent(MasterDetailActivity.this,
-                DetailActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(BakingAppConstants.KEY_RECIPE, recipe);
-        bundle.putInt(BakingAppConstants.KEY_STEP_ID, position);
-
-        intent.putExtra(BakingAppConstants.KEY_RECIPE_BUNDLE, bundle);
-        startActivity(intent);
-    }
-
-
-    /**
-     * Create a new Bundle to hold the users selected information
-     *
-     * @param position item clicked; position 0 contains ingredient list, the rest- recipe steps
-     * @return bundle for the DetailFragment
-     */
-    @NonNull
-    private Bundle getArgsForDetailFragment(int position) {
-        Bundle bundle = new Bundle();
-        if (position == 0) {
-            // ingredients clicked- send ingredients
-            bundle.putParcelableArrayList(BakingAppConstants.KEY_INGREDIENT_LIST,
-                    (ArrayList) recipe.getIngredients());
-            bundle.putInt(BakingAppConstants.KEY_RECIPE_SERVINGS, recipe.getServings());
-        } else {
-            // step clicked - send step
-            bundle.putParcelable(BakingAppConstants.KEY_STEP, recipe.getSteps().get(position));
-        }
-
-        bundle.putString(BakingAppConstants.KEY_RECIPE_NAME, recipe.getName());
-        bundle.putInt(BakingAppConstants.KEY_STEP_ID, position);
-        int stepCount = recipe.getSteps().size();
-        bundle.putInt(BakingAppConstants.KEY_STEP_COUNT, stepCount);
-
-        return bundle;
     }
 
     @Override
@@ -214,5 +131,86 @@ public class MasterDetailActivity extends AppCompatActivity implements
         super.onOptionsItemSelected(item);
 
         return false;
+    }
+
+    /**
+     * Creates a new MasterListFragment for MasterDetailActivity, sets arguments, doesn't add
+     * fragment to back stack
+     * @param bundle arguments that are passed to fragment
+     */
+    private void addMasterListFragment(Bundle bundle) {
+        MasterListFragment masterListFragment = new MasterListFragment();
+        masterListFragment.setArguments(bundle);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.master_list_container, masterListFragment)
+                .commit();
+    }
+
+    /**
+     * Adds a new DetailFragment in master-detail view if the app is in two pane mode
+     */
+    private void addDetailFragment() {
+        DetailFragment detailFragment = new DetailFragment();
+        detailFragment.setArguments(getArgsForDetailFragment
+                (BakingAppConstants.DEFAULT_FRAGMENT_DETAIL_ITEM));
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.detail_container, detailFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    /**
+     * Replaces the existing DetailFragment with a new one. Triggered when step is selected in
+     * master list or in DetailFragment navigation
+     * @param position position of the next item to display in fragment
+     */
+    private void replaceDetailFragment(int position) {
+        DetailFragment detailFragment = new DetailFragment();
+        detailFragment.setArguments(getArgsForDetailFragment(position));
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.detail_container, detailFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void startDetailActivity(int position) {
+        Intent intent = new Intent(MasterDetailActivity.this,
+                DetailActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(BakingAppConstants.KEY_RECIPE, recipe);
+        bundle.putInt(BakingAppConstants.KEY_STEP_ID, position);
+
+        intent.putExtra(BakingAppConstants.KEY_RECIPE_BUNDLE, bundle);
+        startActivity(intent);
+    }
+
+    /**
+     * Create a new Bundle to hold the users selected information
+     *
+     * @param position item clicked; position 0 contains ingredient list, the rest- recipe steps
+     * @return bundle for the DetailFragment
+     */
+    @NonNull
+    private Bundle getArgsForDetailFragment(int position) {
+        Bundle bundle = new Bundle();
+        if (position == 0) {
+            // ingredients clicked- send ingredients
+            bundle.putParcelableArrayList(BakingAppConstants.KEY_INGREDIENT_LIST,
+                    (ArrayList) recipe.getIngredients());
+            bundle.putInt(BakingAppConstants.KEY_RECIPE_SERVINGS, recipe.getServings());
+        } else {
+            // step clicked - send step
+            bundle.putParcelable(BakingAppConstants.KEY_STEP, recipe.getSteps().get(position));
+        }
+
+        bundle.putString(BakingAppConstants.KEY_RECIPE_NAME, recipe.getName());
+        bundle.putInt(BakingAppConstants.KEY_STEP_ID, position);
+        int stepCount = recipe.getSteps().size();
+        bundle.putInt(BakingAppConstants.KEY_STEP_COUNT, stepCount);
+
+        return bundle;
     }
 }

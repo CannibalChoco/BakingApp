@@ -41,6 +41,19 @@ public class DetailActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * Callbacks triggered from DetailFragment when "previous" or "next" button is clicked
+     * @param position the position of the selected step
+     */
+    @Override
+    public void onDetailStepClicked(int position) {
+        replaceDetailFragment(position);
+    }
+
+    /**
+     * Add a detail fragment if one doesn't exist
+     * @param stepId step ID for the fragment to be displayed
+     */
     private void addDetailFragment(int stepId) {
         DetailFragment detailFragment = new DetailFragment();
         detailFragment.setArguments(getArgsForDetailFragment(stepId));
@@ -51,15 +64,10 @@ public class DetailActivity extends AppCompatActivity implements
     }
 
     /**
-     * Callbacks triggered from DetailFragment when "previous" or "next" button is clicked
-     * @param position the position of the selected step
+     * Replace existing fragment
+     * @param position step id for the fragment to be displayed
      */
-    @Override
-    public void onDetailStepClicked(int position) {
-        startDetailFragment(position);
-    }
-
-    private void startDetailFragment(int position) {
+    private void replaceDetailFragment(int position) {
         DetailFragment detailFragment = new DetailFragment();
         detailFragment.setArguments(getArgsForDetailFragment(position));
         getSupportFragmentManager()

@@ -63,8 +63,8 @@ public class BakingWidgetProvider extends AppWidgetProvider {
 
             // launch recipe list view on click
             Intent recipeListActivityIntent = new Intent(context, RecipeListActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, recipeListActivityIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0,
+                    recipeListActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             views.setOnClickPendingIntent(R.id.widget_empty_state_text, pendingIntent);
             views.setOnClickPendingIntent(R.id.widget_recipe_name, pendingIntent);
@@ -81,7 +81,8 @@ public class BakingWidgetProvider extends AppWidgetProvider {
      * @param launchActivityIntent intent for activity to be launched
      * @return pending intent with back stack
      */
-    private static PendingIntent getPendingIntentWithBackStack(Context context, Intent launchActivityIntent) {
+    private static PendingIntent getPendingIntentWithBackStack(Context context,
+                                                               Intent launchActivityIntent) {
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addParentStack(RecipeListActivity.class);
         stackBuilder.addNextIntentWithParentStack(launchActivityIntent);

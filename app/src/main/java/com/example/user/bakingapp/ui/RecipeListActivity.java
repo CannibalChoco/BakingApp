@@ -85,9 +85,7 @@ public class RecipeListActivity extends AppCompatActivity implements
         recipeList = new ArrayList<>();
 
         getIdlingResource();
-
         getRecipesIfConnected();
-
     }
 
     @Override
@@ -118,6 +116,9 @@ public class RecipeListActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * Call getRecipes() if connected, otherwise show empty state message
+     */
     private void getRecipesIfConnected() {
         if (ConnectivityReceiver.isConnected()) {
             getRecipes();
@@ -170,7 +171,9 @@ public class RecipeListActivity extends AppCompatActivity implements
         });
     }
 
-
+    /**
+     * Set different LayoutManagers for handsets and tablets, set up RecyclerView
+     */
     private void setUpUi() {
         Configuration config = getResources().getConfiguration();
         if (config.smallestScreenWidthDp >= 600) {
@@ -202,6 +205,9 @@ public class RecipeListActivity extends AppCompatActivity implements
         startActivity(intent);
     }
 
+    /**
+     * Display ProgressBar and hide everything else
+     */
     private void showLoading() {
         recipeListProgressBar.setVisibility(View.VISIBLE);
 
@@ -209,6 +215,9 @@ public class RecipeListActivity extends AppCompatActivity implements
         recipeEmptyStateText.setVisibility(View.INVISIBLE);
     }
 
+    /**
+     * Display RecyclerView and hide everything else
+     */
     private void showRecipes() {
         recyclerView.setVisibility(View.VISIBLE);
 
@@ -216,6 +225,10 @@ public class RecipeListActivity extends AppCompatActivity implements
         recipeEmptyStateText.setVisibility(View.INVISIBLE);
     }
 
+    /**
+     * Display empty state TextView, set no connection message.
+     * Hide everything else
+     */
     private void showEmptyStateNoConnection() {
         recipeEmptyStateText.setVisibility(View.VISIBLE);
         recipeEmptyStateText.setText(R.string.recipe_list_empty_no_connection);
@@ -224,6 +237,10 @@ public class RecipeListActivity extends AppCompatActivity implements
         recyclerView.setVisibility(View.INVISIBLE);
     }
 
+    /**
+     * Display empty state TextView, set error message.
+     * Hide everything else
+     */
     private void showEmptyStateError() {
         recipeEmptyStateText.setVisibility(View.VISIBLE);
         recipeEmptyStateText.setText(R.string.recipe_list_empty_error);

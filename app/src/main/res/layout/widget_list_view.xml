@@ -20,7 +20,7 @@
             android:paddingTop="@dimen/small_margin"
             android:textColor="@color/colorTextSecondary"
             android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-            android:textSize="26sp"
+            android:textSize="@dimen/widget_recipe_name_text_size"
             tools:text="Recipe name"/>
 
         <ListView

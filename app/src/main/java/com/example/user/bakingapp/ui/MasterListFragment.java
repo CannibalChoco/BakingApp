@@ -43,7 +43,8 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.On
         try{
             stepClickListener = (OnMasterListStepClickListener) context;
         } catch (ClassCastException e){
-            throw new ClassCastException(context.toString() + " must implement OnMasterListStepClickListener");
+            throw new ClassCastException(context.toString()
+                    + " must implement OnMasterListStepClickListener");
         }
     }
 
@@ -51,7 +52,8 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.On
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_master_list, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_master_list, container,
+                false);
         ButterKnife.bind(this, rootView);
 
         Bundle bundle = getArguments();
@@ -63,7 +65,6 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.On
             if (activity != null) {
                 activity.setTitle(recipe.getName());
             }
-
         }
 
         return rootView;
@@ -75,7 +76,7 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.On
     }
 
     /**
-     * Set up everything needed for the master list to display list items
+     * Set up master list RecyclerView
      */
     private void setUpMasterListView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
