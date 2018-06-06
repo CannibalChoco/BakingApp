@@ -26,7 +26,6 @@ import butterknife.ButterKnife;
 @SuppressWarnings("WeakerAccess")
 public class MasterListFragment extends Fragment implements MasterListAdapter.OnStepClickListener{
 
-    // TODO: display "Ingredients"
     public MasterListFragment(){}
 
     private Recipe recipe;
