@@ -57,6 +57,15 @@ public class DetailFragment extends Fragment implements IngredientAdapter.OnChec
     private static final String KEY_CURRENT_WINDOW = "current_window";
     private static final String KEY_IS_CHECKED_ARRAY = "is_checked_array";
 
+    private static final int ID_OF_INGREDIENTS = 0;
+    private static final int ID_OF_INTRO = 1;
+    private static final int COUNT_OF_NON_STEPS = 2;
+    private static final int ADJUST_0_INDEX_FOR_USER_BY = 1;
+    /*
+        The amount to subtract from the list item Id for steps to start with 1
+     */
+    private static final int SUBTRACT_FROM_STEP_ID = COUNT_OF_NON_STEPS - ADJUST_0_INDEX_FOR_USER_BY;
+
     private boolean[] isCheckedArray;
     private boolean isWaitingForInternetConnection = false;
     private boolean hasInitializedVideo = false;
@@ -106,6 +115,8 @@ public class DetailFragment extends Fragment implements IngredientAdapter.OnChec
     TextView nextStepTextView;
     @BindView(R.id.nav_prev_step_text)
     TextView prevStepTextView;
+    @BindView(R.id.label_intro)
+    TextView labelIntro;
 
     @BindView(R.id.player_view)
     PlayerView playerView;
@@ -206,18 +217,36 @@ public class DetailFragment extends Fragment implements IngredientAdapter.OnChec
                 }
             }
 
+            // the id of the stepsList item; includes ingredient and intro
             stepId = args.getInt(BakingAppConstants.KEY_STEP_ID);
-            int stepCount = args.getInt(BakingAppConstants.KEY_STEP_COUNT);
 
-            currentStepTextView.setText(String.valueOf(stepId));
-            String totalSteps = "/" + (stepCount - 1);
-            totalStepsTextView.setText(totalSteps);
+            // the actual step count
+            int actualStepCount = args.getInt(BakingAppConstants.KEY_STEP_COUNT);
+            /*
+              The actualStepCount is stepsList.size() - ingredientItem - introItem;
+              which results in x - 1 - 1;
+              The count starts with "0", but we want to show it as "1" for users
+              So, instead of x - 1 - 1 + 1, just do x - 1
+            */
+            int currentStep = stepId - SUBTRACT_FROM_STEP_ID;
 
-            if (stepId == 0) {
+            if (stepId == ID_OF_INGREDIENTS) {
+                // id == 0 -> ingredients
                 hideBottomNavStepsInfoForIngredients();
-            } else if (stepId > 0 && stepId == stepCount - 1) {
+                labelIntro.setVisibility(View.GONE);
+            } else if (stepId > ID_OF_INTRO){
+                // step displayed
+                currentStepTextView.setText(String.valueOf(currentStep));
+                String totalSteps = "/" + (actualStepCount);
+                totalStepsTextView.setText(totalSteps);
+                labelIntro.setVisibility(View.GONE);
+            }
+
+            // hide "next" button for last recipe detail item(which is also the last step)
+            if (currentStep == actualStepCount) {
                 hideNextInBottomNavForLastStep();
             }
+
         }
 
         return rootView;

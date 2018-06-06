@@ -15,16 +15,16 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.ViewHolder>{
+public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.ViewHolder> {
 
     private List<Step> steps;
     private OnStepClickListener listener;
 
-    public interface OnStepClickListener{
+    public interface OnStepClickListener {
         void onStepSelected(int position);
     }
 
-    public MasterListAdapter(List<Step> steps, OnStepClickListener listener){
+    public MasterListAdapter(List<Step> steps, OnStepClickListener listener) {
         this.listener = listener;
         this.steps = steps;
     }
@@ -42,13 +42,12 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull MasterListAdapter.ViewHolder holder, int position) {
 
-        if (position == 0){
-            holder.ingredients.setText(R.string.label_ingredients);
-        } else {
-            String itemNr = String.valueOf(position) + ".";
+        if (position > 1){
+            String itemNr = String.valueOf(position - 1) + ".";
             holder.itemNr.setText(itemNr);
-            holder.shortDescription.setText(steps.get(position).getShortDescription());
         }
+
+        holder.shortDescription.setText(steps.get(position).getShortDescription());
     }
 
     @Override
@@ -57,7 +56,7 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements
-            View.OnClickListener{
+            View.OnClickListener {
 
         private OnStepClickListener listener;
 
@@ -79,6 +78,6 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Vi
         @Override
         public void onClick(View v) {
             listener.onStepSelected(getAdapterPosition());
-            }
+        }
     }
 }

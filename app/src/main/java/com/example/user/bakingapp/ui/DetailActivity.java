@@ -97,7 +97,10 @@ public class DetailActivity extends AppCompatActivity implements
         bundle.putString(BakingAppConstants.KEY_RECIPE_NAME, recipe.getName());
         bundle.putInt(BakingAppConstants.KEY_STEP_ID, position);
         int stepCount = recipe.getSteps().size();
-        bundle.putInt(BakingAppConstants.KEY_STEP_COUNT, stepCount);
+        // actual step count is (nr of elements in steps list) - (ingredient element) - (intro element)
+        int actualStepCount = stepCount - 2;
+        bundle.putInt(BakingAppConstants.KEY_STEP_COUNT, actualStepCount);
+
 
         return bundle;
     }
