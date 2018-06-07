@@ -25,3 +25,6 @@ or have it misplaced.
 - Leverage a third-party library in your app
 - Use Fragments to create a responsive design that works on phones and tablets
 
+<p></br><img src="screenshots/widget.png" width="300" hspace="20"/><img src="screenshots/recipe_list.png" width="300"/></br><p/>
+<p><img src="screenshots/master_list.png" width="300" hspace="20"/><img src="screenshots/ingredients_list.png" width="300"/></br><p/>
+<p><img src="screenshots/detail_intro.png" width="300" hspace="20"/><img src="screenshots/detail_step.png" width="300"/></br><p/>
