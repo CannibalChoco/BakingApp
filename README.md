@@ -24,4 +24,3 @@ or have it misplaced.
 - Add a widget to the app experience
 - Leverage a third-party library in your app
 - Use Fragments to create a responsive design that works on phones and tablets
-
