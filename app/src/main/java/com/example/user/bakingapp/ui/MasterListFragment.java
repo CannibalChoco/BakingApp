@@ -24,6 +24,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 @SuppressWarnings("WeakerAccess")
+// TODO: fix MasterList for when it's opened from widget
 public class MasterListFragment extends Fragment implements MasterListAdapter.OnStepClickListener{
 
     public MasterListFragment(){}

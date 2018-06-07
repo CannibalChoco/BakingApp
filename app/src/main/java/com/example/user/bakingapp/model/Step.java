@@ -2,6 +2,7 @@ package com.example.user.bakingapp.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 public class Step implements Parcelable{
 
@@ -45,6 +46,7 @@ public class Step implements Parcelable{
     }
 
     public String getVideoURL() {
+        if (TextUtils.isEmpty(videoURL)) return null;
         return videoURL.endsWith(".mp4") ? videoURL : null;
     }
 
@@ -76,6 +78,6 @@ public class Step implements Parcelable{
     }
 
     private boolean thumbnailFormatValid(String thumbnailURL){
-        return !thumbnailURL.endsWith(".mp4");
+        return !TextUtils.isEmpty(thumbnailURL) && !thumbnailURL.endsWith(".mp4");
     }
 }
