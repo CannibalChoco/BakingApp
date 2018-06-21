@@ -3,6 +3,7 @@ package com.example.user.bakingapp.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -54,6 +55,14 @@ public class Recipe implements Parcelable{
 
     public List<Step> getSteps() {
         return steps;
+    }
+
+    public List<Step> getStepsWithIngredients() {
+        Step ingredientMasterListItem = new Step("Ingredients");
+        List<Step> stepsWithIngredient = new ArrayList<>();
+        stepsWithIngredient.add(0, ingredientMasterListItem);
+        stepsWithIngredient.addAll(1, steps);
+        return stepsWithIngredient;
     }
 
     @Override

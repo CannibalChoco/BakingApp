@@ -16,7 +16,6 @@ public class SharedPreferencesUtils {
     public static void saveRecipeInPreferences(Context context, Recipe recipe){
         Gson gson = new Gson();
         String json = gson.toJson(recipe);
-
         SharedPreferences preferences = context.getSharedPreferences(
                 BAKING_SHARED_PREFERENCES, 0);
 
@@ -29,7 +28,6 @@ public class SharedPreferencesUtils {
         SharedPreferences preferences = context.getSharedPreferences(
                 BAKING_SHARED_PREFERENCES, 0);
         String json = preferences.getString(BakingAppConstants.KEY_RECIPE, "");
-
         return new Gson().fromJson(json, Recipe.class);
     }
 

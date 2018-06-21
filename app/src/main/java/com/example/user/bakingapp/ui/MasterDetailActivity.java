@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -41,8 +40,10 @@ public class MasterDetailActivity extends AppCompatActivity implements
 
         Bundle bundle;
 
+        Intent intent = getIntent();
+
         // MasterDetailActivity launched from RecipeListActivity
-        if (getIntent().hasExtra(BakingAppConstants.KEY_RECIPE_BUNDLE)){
+        if (intent.hasExtra(BakingAppConstants.KEY_RECIPE_BUNDLE)){
             bundle = getIntent().getBundleExtra(BakingAppConstants.KEY_RECIPE_BUNDLE);
             recipe = bundle.getParcelable(BakingAppConstants.KEY_RECIPE);
         } else {
@@ -98,7 +99,6 @@ public class MasterDetailActivity extends AppCompatActivity implements
 
         String nameInPrefs = SharedPreferencesUtils.getRecipeNameFromPreferences(this);
         isPinnedToWidget = nameInPrefs.contentEquals(recipe.getName());
-        Log.d("WIDGET", nameInPrefs);
         if(isPinnedToWidget){
             MenuItem pinToWidget = menu.getItem(0);
             pinToWidget.setIcon(R.drawable.ic_action_show_in_widget_enabled);

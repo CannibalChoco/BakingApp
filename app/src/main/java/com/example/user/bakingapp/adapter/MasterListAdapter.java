@@ -25,8 +25,8 @@ public class MasterListAdapter extends RecyclerView.Adapter<MasterListAdapter.Vi
     }
 
     public MasterListAdapter(List<Step> steps, OnStepClickListener listener) {
-        this.listener = listener;
         this.steps = steps;
+        this.listener = listener;
     }
 
 

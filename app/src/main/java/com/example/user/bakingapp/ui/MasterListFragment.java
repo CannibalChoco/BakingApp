@@ -15,16 +15,12 @@ import android.view.ViewGroup;
 import com.example.user.bakingapp.R;
 import com.example.user.bakingapp.adapter.MasterListAdapter;
 import com.example.user.bakingapp.model.Recipe;
-import com.example.user.bakingapp.model.Step;
 import com.example.user.bakingapp.utils.BakingAppConstants;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 @SuppressWarnings("WeakerAccess")
-// TODO: fix MasterList for when it's opened from widget
 public class MasterListFragment extends Fragment implements MasterListAdapter.OnStepClickListener{
 
     public MasterListFragment(){}
@@ -84,11 +80,7 @@ public class MasterListFragment extends Fragment implements MasterListAdapter.On
      */
     private void setUpMasterListView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-
-        Step ingredientMasterListItem = new Step(getString(R.string.label_ingredients));
-        List<Step> stepsWithIngredient = recipe.getSteps();
-        stepsWithIngredient.add(0, ingredientMasterListItem);
-        MasterListAdapter adapter = new MasterListAdapter(stepsWithIngredient, this);
+        MasterListAdapter adapter = new MasterListAdapter(recipe.getStepsWithIngredients(), this);
         masterListRecyclerView.setLayoutManager(layoutManager);
         masterListRecyclerView.setAdapter(adapter);
         masterListRecyclerView.setHasFixedSize(true);
